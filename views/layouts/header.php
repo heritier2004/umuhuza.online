@@ -21,8 +21,11 @@
 <header class="marketplace-header fixed-top shadow-sm">
   <nav class="navbar navbar-expand-lg container py-2">
     <?php $currentUser = isLoggedIn() ? currentUser() : null; ?>
-    <a class="navbar-brand d-flex align-items-center me-3" href="?route=home">
+    <a class="navbar-brand d-flex align-items-center gap-3 me-3" href="?route=home">
       <img src="public/assets/logo_wide.png" alt="UMUHUZA.ONLINE" style="height: 50px; width: auto; object-fit: contain; max-height: 50px;" />
+      <span class="d-none d-lg-block text-muted-custom" style="font-size: 0.85rem; border-left: 1px solid rgba(15, 23, 42, 0.12); padding-left: 14px; font-weight: 500; letter-spacing: 0.03em;">
+        Connecting People & Services
+      </span>
     </a>
     <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
