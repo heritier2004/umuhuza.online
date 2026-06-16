@@ -12,10 +12,10 @@
     <button class="ad-menu-toggle" id="adMenuToggle" aria-label="Toggle sidebar" type="button">
       <svg class="ad-svg-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
     </button>
-    <a href="?route=home" class="ad-brand" aria-label="Rwanda Marketplace Home">
-      <div class="ad-brand-mark">RM</div>
+    <a href="?route=home" class="ad-brand" aria-label="UMUHUZA.ONLINE Home">
+      <div class="ad-brand-mark">UO</div>
       <div class="ad-brand-text">
-        <strong>Rwanda Marketplace</strong>
+        <strong>UMUHUZA.ONLINE</strong>
         <span>Admin Command Center</span>
       </div>
     </a>
@@ -151,7 +151,7 @@
         <!-- Hero Banner -->
         <div class="ad-exec-hero">
           <div class="ad-hero-badge"><div class="dot"></div> Live Platform Status</div>
-          <div class="ad-hero-eyebrow">RWANDA MARKETPLACE · CEO DASHBOARD</div>
+          <div class="ad-hero-eyebrow">UMUHUZA.ONLINE · CEO DASHBOARD</div>
           <h2 class="ad-hero-title">Good evening, <?= e(explode(' ', $_SESSION['full_name'] ?? 'Administrator')[0]) ?> </h2>
           <p class="ad-hero-sub">Here is your complete business snapshot. Revenue is on track and platform health is excellent.</p>
           <div class="ad-hero-stats">
@@ -1378,7 +1378,7 @@
               <div class="ad-form-row">
                 <div class="ad-form-group">
                   <label for="settingsEmail">Email Address</label>
-                  <input type="email" id="settingsEmail" class="ad-form-control" placeholder="admin@rwandamarketplace.rw" />
+                  <input type="email" id="settingsEmail" class="ad-form-control" placeholder="admin@umuhuza.online" />
                 </div>
                 <div class="ad-form-group">
                   <label for="settingsPhone">Phone Number</label>
@@ -1420,11 +1420,11 @@
             <div class="ad-form-row">
               <div class="ad-form-group">
                 <label>Platform Name</label>
-                <input type="text" class="ad-form-control" value="Rwanda Marketplace" />
+                <input type="text" class="ad-form-control" value="UMUHUZA.ONLINE" />
               </div>
               <div class="ad-form-group">
                 <label>Support Email</label>
-                <input type="email" class="ad-form-control" placeholder="support@rwandamarketplace.rw" />
+                <input type="email" class="ad-form-control" placeholder="support@umuhuza.online" />
               </div>
             </div>
             <div class="ad-form-row">

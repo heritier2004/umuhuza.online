@@ -249,7 +249,7 @@ $trendingServices = $trendingServices ?? [
 <section class="conversion-section">
   <div class="container">
     <div style="text-align: center; margin-bottom: 32px;">
-      <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 12px; color: #0f172a;">Ready to join Rwanda Marketplace?</h2>
+      <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 12px; color: #0f172a;">Ready to join UMUHUZA.ONLINE?</h2>
       <p style="color: #475569; font-size: 1rem; max-width: 500px; margin: 0 auto;">Choose your role and start connecting with buyers, renters, or service seekers today.</p>
     </div>
     <div class="conversion-cards-grid">

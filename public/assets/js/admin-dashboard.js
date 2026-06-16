@@ -172,7 +172,7 @@
       message = "Database backup has been initiated and successfully completed! Saved as: backup-2026-06-09.sql.gz (2.4 GB)";
     } else if (action === 'updates') {
       title = "System Update Check";
-      message = "All packages are up to date. Rwanda Marketplace core is running on version 2.4.1.";
+      message = "All packages are up to date. UMUHUZA.ONLINE core is running on version 2.4.1.";
     } else if (action === 'integrity') {
       title = "Security Verification";
       message = "System scan completed! Checksums match core repositories. 0 altered files detected.";

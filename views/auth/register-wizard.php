@@ -81,7 +81,7 @@
       <div class="wizard-step" id="step3">
         <div class="step-content">
           <h2 class="step-title">What do you want to do?</h2>
-          <p class="step-subtitle">Choose how you want to use Rwanda Marketplace</p>
+          <p class="step-subtitle">Choose how you want to use UMUHUZA.ONLINE</p>
 
           <div class="role-cards">
             <!-- Agent Card -->

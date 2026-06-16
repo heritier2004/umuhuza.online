@@ -5,7 +5,7 @@
     <!-- Header -->
     <div class="login-header">
       <h1 class="login-title">Welcome back</h1>
-      <p class="login-subtitle">Sign in to Rwanda Marketplace</p>
+      <p class="login-subtitle">Sign in to UMUHUZA.ONLINE</p>
     </div>
 
     <!-- Login Form -->

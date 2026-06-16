@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>Rwanda Marketplace System</title>
+  <title>UMUHUZA.ONLINE</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -22,9 +22,9 @@
   <nav class="navbar navbar-expand-lg container py-2">
     <?php $currentUser = isLoggedIn() ? currentUser() : null; ?>
     <a class="navbar-brand d-flex align-items-center gap-2 fw-bold text-primary me-3" href="?route=home">
-      <span class="brand-mark">RM</span>
+      <span class="brand-mark">UO</span>
       <span class="d-none d-sm-block">
-        Rwanda Marketplace
+        UMUHUZA.ONLINE
         <small>Local property & trusted services</small>
       </span>
     </a>
