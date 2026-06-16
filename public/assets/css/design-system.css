@@ -9,7 +9,8 @@
   --primary-foreground: #ffffff;
   --secondary: #1E40AF;
   --secondary-foreground: #ffffff;
-  --muted: #EEF1F8;
+  --muted: #64748B;
+  --muted-bg: #EEF1F8;
   --muted-foreground: #64748B;
   --accent: #FFF7ED;
   --accent-foreground: #EA580C;
@@ -87,7 +88,7 @@ body {
   gap: 6px;
   border-radius: 999px;
   padding: 6px 10px;
-  background: var(--muted);
+  background: var(--muted-bg);
   color: var(--foreground);
   font-size: 0.78rem;
   font-weight: 600;
