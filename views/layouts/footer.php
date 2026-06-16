@@ -21,7 +21,7 @@
   <div class="container row g-4">
     <div class="col-md-4"><h5>About UMUHUZA.ONLINE</h5><p class="text-light">UMUHUZA.ONLINE is a local property and service platform that helps buyers, renters, agents, and service providers discover trusted opportunities, request help, and connect faster in Rwanda.</p></div>
     <div class="col-md-4"><h5>Quick Links</h5><a href="?route=home" class="d-block text-light mb-2">Home</a><a href="?route=listings" class="d-block text-light mb-2">Listings</a><a href="?route=register" class="d-block text-light mb-2">Provider Registration</a></div>
-    <div class="col-md-4"><h5>Contact</h5><p class="mb-1 text-light">Call: +250 788 367 073</p><p class="mb-1 text-light">WhatsApp: +250 788 367 073</p><p class="mb-0 text-light">Terms & Privacy</p></div>
+    <div class="col-md-4"><h5>Contact</h5><p class="mb-1 text-light">Call: <a href="tel:+250788367073" class="text-light text-decoration-none fw-semibold">+250 788 367 073</a></p><p class="mb-1 text-light">WhatsApp: <a href="https://wa.me/250788367073" class="text-light text-decoration-none fw-semibold" target="_blank">+250 788 367 073</a></p><p class="mb-0 text-light">Terms & Privacy</p></div>
   </div>
 </footer>
 <?php endif; ?>
