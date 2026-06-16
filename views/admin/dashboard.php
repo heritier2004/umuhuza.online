@@ -13,7 +13,7 @@
       <svg class="ad-svg-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
     </button>
     <a href="?route=home" class="ad-brand" aria-label="UMUHUZA.ONLINE Home">
-      <img src="public/assets/logo.png" alt="UMUHUZA.ONLINE" style="height: 32px; width: auto; object-fit: contain; margin-right: 8px;" />
+      <img src="public/assets/logo.png" alt="UMUHUZA.ONLINE" style="height: 48px; width: auto; object-fit: contain; margin-right: 8px;" />
       <div class="ad-brand-text">
         <strong>UMUHUZA.ONLINE</strong>
         <span>Admin Command Center</span>
