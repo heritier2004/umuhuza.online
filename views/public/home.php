@@ -131,7 +131,7 @@ $trendingServices = [];
           <div class="d-flex flex-wrap gap-2 mb-3">
             <span class="<?= $planBadgeClass ?>"><?= $planBadgeText ?></span>
             <span class="badge-new"><?= e($item['category_name'] ?? 'Service') ?></span>
-            <span class="badge badge-verified">✓ Verified</span>
+            <span class="badge badge-verified"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-right:2px; vertical-align:middle;"><polyline points="20 6 9 17 4 12"/></svg>Verified</span>
           </div>
           <div class="small text-dark fw-semibold mb-3">Provider: <?= e($item['provider_name'] ?? 'Verified provider') ?></div>
           <div class="listing-actions compact-actions">
@@ -150,7 +150,7 @@ $trendingServices = [];
       <h2 data-i18n="featured_listings_title">Premium listings</h2>
       <p class="text-muted-custom mb-0" data-i18n="featured_listings_sub">Boosted picks prioritized for visibility and trust.</p>
     </div>
-    <span class="section-header-badge">⭐ Premium visibility</span>
+    <span class="section-header-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align: middle; margin-right: 4px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Premium visibility</span>
   </div>
   <div class="featured-scroll">
     <?php foreach ($featuredListings as $item): 
@@ -175,7 +175,7 @@ $trendingServices = [];
       <h2 data-i18n="top_rated_providers_title">Top rated providers</h2>
       <p class="text-muted-custom mb-0" data-i18n="top_rated_providers_sub">Verified profiles ranked by local rating and activity.</p>
     </div>
-    <span class="section-header-badge success">✅ Marketplace trusted</span>
+    <span class="section-header-badge success"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="vertical-align: middle; margin-right: 4px;"><polyline points="20 6 9 17 4 12"/></svg>Marketplace trusted</span>
   </div>
   <div class="provider-grid">
     <?php foreach ($topProviders as $provider): 
@@ -218,7 +218,7 @@ $trendingServices = [];
               <div>
                 <strong><?= e($item['title'] ?? 'Marketplace update') ?></strong>
                 <p class="text-muted-custom small mb-1"><?= e($item['category_name'] ?? 'Marketplace') ?> • <?= e($item['province'] ?? 'Rwanda') ?> / <?= e($item['district'] ?? 'Nationwide') ?></p>
-                <span class="badge-new">🆕 New</span>
+                <span class="badge-new">New</span>
               </div>
             </article>
           <?php endforeach; ?>
@@ -237,19 +237,25 @@ $trendingServices = [];
     </div>
     <div class="conversion-cards-grid">
       <div class="conversion-card agent-card">
-        <div class="conversion-card-icon">🏠</div>
+        <div class="conversion-card-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--primary);"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
         <h3>Become an Agent</h3>
         <p>Sell or rent properties and reach verified buyers and renters across Rwanda</p>
         <a href="?route=register" class="btn btn-outline-primary btn-sm">Get started</a>
       </div>
       <div class="conversion-card">
-        <div class="conversion-card-icon">🔧</div>
+        <div class="conversion-card-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--primary);"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+        </div>
         <h3>Become a Service Provider</h3>
         <p>Offer your services and receive direct requests from clients who need your expertise</p>
         <a href="?route=register" class="btn btn-outline-primary btn-sm">Get started</a>
       </div>
       <div class="conversion-card">
-        <div class="conversion-card-icon">👤</div>
+        <div class="conversion-card-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--primary);"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
         <h3>Browse & Connect</h3>
         <p>Find trusted agents, service providers, and post requests for the services you need</p>
         <a href="?route=listings" class="btn btn-outline-primary btn-sm">Explore now</a>

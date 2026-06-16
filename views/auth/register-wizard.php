@@ -86,14 +86,18 @@
           <div class="role-cards">
             <!-- Agent Card -->
             <div class="role-card" onclick="selectRole('agent', this)">
-              <div class="role-icon">🏠</div>
+              <div class="role-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              </div>
               <h3>Agent</h3>
               <p>Sell or rent properties</p>
             </div>
 
             <!-- Service Provider Card -->
             <div class="role-card" onclick="selectRole('service_provider', this)">
-              <div class="role-icon">🔧</div>
+              <div class="role-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+              </div>
               <h3>Service Provider</h3>
               <p>Offer services and receive clients</p>
             </div>
@@ -166,17 +170,17 @@
             <label class="form-label">Service Category</label>
             <select class="form-select form-control-lg" id="serviceCategory" name="service_category" required>
               <option value="">Select what you do...</option>
-              <option value="electrician">⚡ Electrician</option>
-              <option value="plumber">🚰 Plumber</option>
-              <option value="mechanic">🔧 Mechanic</option>
-              <option value="painter">🎨 Painter</option>
-              <option value="technician">💻 Technician</option>
-              <option value="welder">🔥 Welder</option>
-              <option value="cleaner">🧹 Cleaner</option>
-              <option value="moving">📦 Moving Service</option>
-              <option value="security">🛡️ Security Service</option>
-              <option value="it_support">🖥️ IT Support</option>
-              <option value="freelancer">💼 Freelancer</option>
+              <option value="electrician">Electrician</option>
+              <option value="plumber">Plumber</option>
+              <option value="mechanic">Mechanic</option>
+              <option value="painter">Painter</option>
+              <option value="technician">Technician</option>
+              <option value="welder">Welder</option>
+              <option value="cleaner">Cleaner</option>
+              <option value="moving">Moving Service</option>
+              <option value="security">Security Service</option>
+              <option value="it_support">IT Support</option>
+              <option value="freelancer">Freelancer</option>
             </select>
           </div>
 

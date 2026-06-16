@@ -66,9 +66,9 @@
 
     <!-- Trust Badges -->
     <div class="login-badges">
-      <span class="badge-item">✓ Verified agents</span>
-      <span class="badge-item">✓ Secure payments</span>
-      <span class="badge-item">✓ Fast matching</span>
+      <span class="badge-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-right:4px; vertical-align:middle;"><polyline points="20 6 9 17 4 12"/></svg>Verified agents</span>
+      <span class="badge-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-right:4px; vertical-align:middle;"><polyline points="20 6 9 17 4 12"/></svg>Secure payments</span>
+      <span class="badge-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-right:4px; vertical-align:middle;"><polyline points="20 6 9 17 4 12"/></svg>Fast matching</span>
     </div>
   </div>
 </section>
