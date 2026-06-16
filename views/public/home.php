@@ -1,8 +1,8 @@
 <?php include __DIR__ . '/../layouts/header.php'; ?>
 <?php
 $heroSlides = $heroSlides ?? [
-  ['title' => 'Shakisha Inzu n\'Abatanga Serivisi Bizewe Mu Rwanda', 'location' => 'Kigali / Gasabo', 'rating' => 4.9, 'badge' => 'Premium', 'category' => 'Real Estate', 'phone' => '+250788000000', 'whatsapp' => '+250788000000', 'image' => '#1E40AF'],
-  ['title' => 'Tangira Abatanga Serivisi Mwiza', 'location' => 'Kigali / Nyarugenge', 'rating' => 4.8, 'badge' => 'Trending', 'category' => 'Technical Service', 'phone' => '+250788000001', 'whatsapp' => '+250788000001', 'image' => '#F97316'],
+  ['title' => 'Shakisha Inzu n\'Abatanga Serivisi Bizewe Mu Rwanda', 'location' => 'Kigali / Gasabo', 'rating' => 4.9, 'badge' => 'Premium', 'category' => 'Real Estate', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'image' => '#1E40AF'],
+  ['title' => 'Tangira Abatanga Serivisi Mwiza', 'location' => 'Kigali / Nyarugenge', 'rating' => 4.8, 'badge' => 'Trending', 'category' => 'Technical Service', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'image' => '#F97316'],
 ];
 $nearbyListings = $nearbyListings ?? [];
 $featuredListings = $featuredListings ?? [];
@@ -17,10 +17,7 @@ $categories = $categories ?? [
   ['icon' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 7h18M6 7v10m12-10v10M8 17h8"/><path d="M7 12h10"/></svg>', 'title' => 'Logistics', 'slug' => 'logistics', 'subtitle' => 'Transport and delivery services'],
   ['icon' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 7h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><path d="M8 11h8M8 15h5"/></svg>', 'title' => 'General Services', 'slug' => 'services', 'subtitle' => 'Cleaning, events, and daily help'],
 ];
-$trendingServices = $trendingServices ?? [
-  ['label' => 'TV Repair trending in Kigali', 'detail' => 'Fast response and verified electronics specialists available today.'],
-  ['label' => 'Plumbing high demand in Gasabo', 'detail' => 'Popular maintenance and leak repairs are being requested near you.'],
-];
+$trendingServices = [];
 ?>
 <section class="container py-3 home-feed-shell">
   <div class="hero-slider card-hover" id="heroSlider">
@@ -32,8 +29,8 @@ $trendingServices = $trendingServices ?? [
           <h1><?= e($slide['title'] ?? 'Marketplace listing') ?></h1>
           <p><?= e($slide['location'] ?? 'Rwanda') ?> • <?= e($slide['rating'] ?? '4.5') ?> ★</p>
           <div class="hero-actions">
-            <a class="btn btn-light btn-sm" href="tel:<?= e($slide['phone'] ?? '+250788000000') ?>">Call</a>
-            <a class="btn btn-success btn-sm" href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $slide['whatsapp'] ?? '+250788000000') ?>">WhatsApp</a>
+            <a class="btn btn-light btn-sm" href="tel:<?= e($slide['phone'] ?? '+250788367073') ?>">Call</a>
+            <a class="btn btn-success btn-sm" href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $slide['whatsapp'] ?? '+250788367073') ?>">WhatsApp</a>
           </div>
           <div class="hero-trust-indicators">
             <div class="hero-trust-item">
@@ -138,8 +135,8 @@ $trendingServices = $trendingServices ?? [
           </div>
           <div class="small text-dark fw-semibold mb-3">Provider: <?= e($item['provider_name'] ?? 'Verified provider') ?></div>
           <div class="listing-actions compact-actions">
-            <a class="btn btn-call btn-sm" href="tel:+250788000000">View details</a>
-            <a class="btn btn-whatsapp btn-sm" href="https://wa.me/250788000000">WhatsApp</a>
+            <a class="btn btn-call btn-sm" href="tel:+250788367073">View details</a>
+            <a class="btn btn-whatsapp btn-sm" href="https://wa.me/250788367073">WhatsApp</a>
           </div>
         </div>
       </article>
@@ -198,8 +195,8 @@ $trendingServices = $trendingServices ?? [
         </div>
         <div class="badges"><span class="badge badge-verified">Verified</span><span class="badge badge-premium"><?= e($provider['distance'] ?? '1.0 km') ?></span></div>
         <div class="listing-actions compact-actions">
-          <a class="btn btn-call btn-sm" href="tel:<?= e($provider['phone'] ?? '+250788000000') ?>">Call</a>
-          <a class="btn btn-whatsapp btn-sm" href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $provider['whatsapp'] ?? '+250788000000') ?>">WhatsApp</a>
+          <a class="btn btn-call btn-sm" href="tel:<?= e($provider['phone'] ?? '+250788367073') ?>">Call</a>
+          <a class="btn btn-whatsapp btn-sm" href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $provider['whatsapp'] ?? '+250788367073') ?>">WhatsApp</a>
         </div>
       </article>
     <?php endforeach; ?>
@@ -208,7 +205,7 @@ $trendingServices = $trendingServices ?? [
 
 <section class="container py-4" data-section="activity">
   <div class="row g-4">
-    <article class="col-lg-7">
+    <article class="col-lg-12">
       <div class="panel p-4 h-100">
         <div class="mb-3">
           <h2 class="section-title mb-1" data-i18n="recent_activity_title">Recent activity</h2>
@@ -223,20 +220,6 @@ $trendingServices = $trendingServices ?? [
                 <p class="text-muted-custom small mb-1"><?= e($item['category_name'] ?? 'Marketplace') ?> • <?= e($item['province'] ?? 'Rwanda') ?> / <?= e($item['district'] ?? 'Nationwide') ?></p>
                 <span class="badge-new">🆕 New</span>
               </div>
-            </article>
-          <?php endforeach; ?>
-        </div>
-      </div>
-    </article>
-    <article class="col-lg-5">
-      <div class="panel p-4 h-100">
-        <h2 class="section-title mb-2" data-i18n="trending_services_title">Trending services</h2>
-        <p class="text-muted-custom mb-3" data-i18n="trending_services_sub">Auto-generated from request demand and market activity.</p>
-        <div class="trend-list">
-          <?php foreach ($trendingServices as $trend): ?>
-            <article class="trend-item">
-              <strong><?= e($trend['label']) ?></strong>
-              <p class="text-muted-custom small mb-0"><?= e($trend['detail']) ?></p>
             </article>
           <?php endforeach; ?>
         </div>

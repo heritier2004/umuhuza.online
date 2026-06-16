@@ -191,9 +191,9 @@ if ($pdo) {
 }
 if (empty($topProviders)) {
     $topProviders = [
-        ['full_name' => 'Kigali Home Fix', 'username' => 'homefix', 'phone' => '+250788000000', 'whatsapp' => '+250788000000', 'rating' => 4.9, 'service_category' => 'Plumbing & Repairs', 'distance' => '1.2 km', 'provider_kind' => 'service', 'province' => 'Kigali', 'district' => 'Gasabo'],
-        ['full_name' => 'Urban Tech Rwanda', 'username' => 'urbantech', 'phone' => '+250788000001', 'whatsapp' => '+250788000001', 'rating' => 4.8, 'service_category' => 'TV & Electronics', 'distance' => '2.1 km', 'provider_kind' => 'service', 'province' => 'Kigali', 'district' => 'Nyarugenge'],
-        ['full_name' => 'Smart Realty Hub', 'username' => 'smartrealty', 'phone' => '+250788000002', 'whatsapp' => '+250788000002', 'rating' => 4.7, 'service_category' => 'Real Estate', 'distance' => '3.0 km', 'provider_kind' => 'agent', 'province' => 'Kigali', 'district' => 'Kicukiro'],
+        ['full_name' => 'Kigali Home Fix', 'username' => 'homefix', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'rating' => 4.9, 'service_category' => 'Plumbing & Repairs', 'distance' => '1.2 km', 'provider_kind' => 'service', 'province' => 'Kigali', 'district' => 'Gasabo'],
+        ['full_name' => 'Urban Tech Rwanda', 'username' => 'urbantech', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'rating' => 4.8, 'service_category' => 'TV & Electronics', 'distance' => '2.1 km', 'provider_kind' => 'service', 'province' => 'Kigali', 'district' => 'Nyarugenge'],
+        ['full_name' => 'Smart Realty Hub', 'username' => 'smartrealty', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'rating' => 4.7, 'service_category' => 'Real Estate', 'distance' => '3.0 km', 'provider_kind' => 'agent', 'province' => 'Kigali', 'district' => 'Kicukiro'],
     ];
     $zoneAgentCount = 1;
     $zoneServiceCount = 2;
@@ -207,24 +207,20 @@ if (!empty($featuredListings)) {
             'rating' => (float)($item['rating'] ?? 4.5),
             'badge' => $item['plan_name'] ?? 'Featured',
             'category' => $item['category_name'] ?? 'Marketplace',
-            'phone' => $item['phone'] ?? '+250788000000',
-            'whatsapp' => $item['whatsapp'] ?? '+250788000000',
+            'phone' => $item['phone'] ?? '+250788367073',
+            'whatsapp' => $item['whatsapp'] ?? '+250788367073',
             'image' => '#1E40AF',
         ];
     }
 }
 if (empty($heroSlides)) {
     $heroSlides = [
-        ['title' => 'Featured house in Kigali', 'location' => 'Kigali / Gasabo', 'rating' => 4.9, 'badge' => 'Premium', 'category' => 'Real Estate', 'phone' => '+250788000000', 'whatsapp' => '+250788000000', 'image' => '#1E40AF'],
-        ['title' => 'TV repair specialists', 'location' => 'Kigali / Nyarugenge', 'rating' => 4.8, 'badge' => 'Trending', 'category' => 'Technical Service', 'phone' => '+250788000001', 'whatsapp' => '+250788000001', 'image' => '#F97316'],
-        ['title' => 'Plumbing and maintenance', 'location' => 'Rwanda / Nationwide', 'rating' => 4.7, 'badge' => 'Popular', 'category' => 'Services', 'phone' => '+250788000002', 'whatsapp' => '+250788000002', 'image' => '#1E3A8A'],
+        ['title' => 'Featured house in Kigali', 'location' => 'Kigali / Gasabo', 'rating' => 4.9, 'badge' => 'Premium', 'category' => 'Real Estate', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'image' => '#1E40AF'],
+        ['title' => 'TV repair specialists', 'location' => 'Kigali / Nyarugenge', 'rating' => 4.8, 'badge' => 'Trending', 'category' => 'Technical Service', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'image' => '#F97316'],
+        ['title' => 'Plumbing and maintenance', 'location' => 'Rwanda / Nationwide', 'rating' => 4.7, 'badge' => 'Popular', 'category' => 'Services', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'image' => '#1E3A8A'],
     ];
 }
-$trendingServices = [
-    ['label' => 'TV Repair trending in Kigali', 'detail' => 'Fast response and verified electronics specialists available today.'],
-    ['label' => 'Plumbing high demand in Gasabo', 'detail' => 'Popular maintenance and leak repairs are being requested near you.'],
-    ['label' => 'House cleaning in Muhanga', 'detail' => 'Reliable residential cleaning and home care suggestions.'],
-];
+$trendingServices = [];
 switch ($route) {
     case 'listings':
         $listings = $ranked;

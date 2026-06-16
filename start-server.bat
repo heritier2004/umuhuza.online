@@ -1,13 +1,13 @@
 @echo off
 REM ============================================================================
-REM Rwanda Marketplace - Development Server Starter
+REM UMUHUZA.ONLINE - Development Server Starter
 REM ============================================================================
 REM This script starts the PHP built-in web server for local development
 REM ============================================================================
 
 echo.
 echo ╔════════════════════════════════════════════════════════════════════╗
-echo ║  Rwanda Marketplace - Development Server                          ║
+echo ║  UMUHUZA.ONLINE - Development Server                             ║
 echo ╚════════════════════════════════════════════════════════════════════╝
 echo.
 

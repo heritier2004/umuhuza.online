@@ -1,11 +1,11 @@
 # ============================================================================
-# Rwanda Marketplace - Development Server Starter (PowerShell)
+# UMUHUZA.ONLINE - Development Server Starter (PowerShell)
 # ============================================================================
 # This script starts the PHP built-in web server for local development
 # ============================================================================
 
 Write-Host "`n╔════════════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-Write-Host "║  Rwanda Marketplace - Development Server                          ║" -ForegroundColor Cyan
+Write-Host "║  UMUHUZA.ONLINE - Development Server                             ║" -ForegroundColor Cyan
 Write-Host "╚════════════════════════════════════════════════════════════════════╝`n" -ForegroundColor Cyan
 
 # Check if PHP is available
