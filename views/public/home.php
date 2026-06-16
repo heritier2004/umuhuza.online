@@ -135,8 +135,8 @@ $trendingServices = [];
           </div>
           <div class="small text-dark fw-semibold mb-3">Provider: <?= e($item['provider_name'] ?? 'Verified provider') ?></div>
           <div class="listing-actions compact-actions">
-            <a class="btn btn-call btn-sm" href="tel:+250788367073">View details</a>
-            <a class="btn btn-whatsapp btn-sm" href="https://wa.me/250788367073">WhatsApp</a>
+            <a class="btn btn-call btn-sm" href="tel:<?= e($item['phone'] ?? '+250788367073') ?>">Call</a>
+            <a class="btn btn-whatsapp btn-sm" href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $item['whatsapp'] ?? '+250788367073') ?>">WhatsApp</a>
           </div>
         </div>
       </article>

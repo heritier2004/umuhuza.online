@@ -10,7 +10,7 @@
       <p class="mb-1"><strong>Category:</strong> <?= e(($listing['category_name'] ?? '')) ?></p>
       <p class="mb-1"><strong>Plan:</strong> <?= e(($listing['plan_name'] ?? '')) ?></p>
       <p class="fw-bold text-primary fs-5 mb-3"><?= formatPrice(($listing['price'] ?? 0)) ?></p>
-      <div class="d-flex gap-2"><a class="btn btn-primary" href="tel:<?= e(($listing['phone'] ?? '')) ?>">Call now</a><a class="btn btn-success" href="https://wa.me/<?= e(($listing['whatsapp'] ?? '')) ?>">WhatsApp</a></div>
+      <div class="d-flex gap-2"><a class="btn btn-primary" href="tel:<?= e(($listing['phone'] ?? '')) ?>">Call now</a><a class="btn btn-success" href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $listing['whatsapp'] ?? '') ?>">WhatsApp</a></div>
     </article>
     <aside class="col-lg-4 panel p-4">
       <h4 class="fw-bold mb-3">Provider profile</h4>

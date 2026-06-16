@@ -15,7 +15,7 @@
       <p class="small text-muted-custom mb-1"><strong>Status:</strong> <?= e(($listing['provider_status'] ?? 'active')) ?></p>
       <div class="d-flex gap-2 mt-3">
         <a class="btn btn-primary" href="tel:<?= e(($listing['phone'] ?? '')) ?>">Call</a>
-        <a class="btn btn-success" href="https://wa.me/<?= e(($listing['whatsapp'] ?? '')) ?>">WhatsApp</a>
+        <a class="btn btn-success" href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $listing['whatsapp'] ?? '') ?>">WhatsApp</a>
       </div>
     </aside>
     <main class="col-lg-8">
