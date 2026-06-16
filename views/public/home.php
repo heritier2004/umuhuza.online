@@ -33,22 +33,22 @@ $trendingServices = [];
             <a class="btn btn-success btn-sm" href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $slide['whatsapp'] ?? '+250788367073') ?>">WhatsApp</a>
           </div>
           <div class="hero-trust-indicators">
-            <div class="hero-trust-item">
+            <a href="?route=listings&category=Real+Estate" class="hero-trust-item">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
               Verified Agents
-            </div>
-            <div class="hero-trust-item">
+            </a>
+            <a href="?route=listings" class="hero-trust-item">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
               Verified Service Providers
-            </div>
-            <div class="hero-trust-item">
+            </a>
+            <a href="?route=listings" class="hero-trust-item">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
               Secure Marketplace
-            </div>
-            <div class="hero-trust-item">
+            </a>
+            <a href="#requestModal" data-bs-toggle="modal" class="hero-trust-item">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
               Fast Requests
-            </div>
+            </a>
           </div>
         </div>
       </article>
