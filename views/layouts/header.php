@@ -22,7 +22,7 @@
   <nav class="navbar navbar-expand-lg container py-2">
     <?php $currentUser = isLoggedIn() ? currentUser() : null; ?>
     <a class="navbar-brand d-flex align-items-center me-3" href="?route=home">
-      <img src="public/assets/logo.png" alt="UMUHUZA.ONLINE" style="height: 60px; width: auto; object-fit: contain; max-height: 60px;" />
+      <img src="public/assets/logo_wide.png" alt="UMUHUZA.ONLINE" style="height: 50px; width: auto; object-fit: contain; max-height: 50px;" />
     </a>
     <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
