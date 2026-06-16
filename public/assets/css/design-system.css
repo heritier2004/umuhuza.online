@@ -1,0 +1,114 @@
+:root {
+  --background: #F5F7FB;
+  --foreground: #0F172A;
+  --card: #ffffff;
+  --card-foreground: #0F172A;
+  --popover: #ffffff;
+  --popover-foreground: #0F172A;
+  --primary: #F97316;
+  --primary-foreground: #ffffff;
+  --secondary: #1E40AF;
+  --secondary-foreground: #ffffff;
+  --muted: #EEF1F8;
+  --muted-foreground: #64748B;
+  --accent: #FFF7ED;
+  --accent-foreground: #EA580C;
+  --destructive: #DC2626;
+  --destructive-foreground: #ffffff;
+  --border: rgba(15, 23, 42, 0.08);
+  --input: transparent;
+  --input-background: #ffffff;
+  --switch-background: #CBD5E1;
+  --ring: #F97316;
+  --chart-1: #F97316;
+  --chart-2: #1E40AF;
+  --chart-3: #16A34A;
+  --chart-4: #22C55E;
+  --chart-5: #EA580C;
+  --radius: 0.75rem;
+  --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.10);
+  --shadow-card: 0 14px 30px rgba(15, 23, 42, 0.08);
+}
+
+* { box-sizing: border-box; }
+
+html { font-size: 16px; }
+
+body {
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.95), rgba(245, 247, 251, 0.98) 35%, #edf2f7 100%);
+  color: var(--foreground);
+}
+
+.marketplace-body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.market-card,
+.listing-card,
+.featured-card,
+.provider-card,
+.category-card,
+.panel,
+.search-panel,
+.feature-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) + 4px);
+  box-shadow: var(--shadow-card);
+}
+
+.btn-primary,
+.btn-dark,
+.btn-success,
+.btn-outline-light {
+  border-radius: 999px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.btn-primary:hover,
+.btn-dark:hover,
+.btn-success:hover,
+.btn-outline-light:hover {
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), #EA580C);
+  border-color: transparent;
+  color: var(--primary-foreground);
+  box-shadow: 0 12px 24px rgba(249, 115, 22, 0.22);
+}
+
+.badge-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: var(--muted);
+  color: var(--foreground);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.section-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.section-heading h2,
+.section-heading h3 {
+  margin: 0;
+  color: var(--foreground);
+}
+
+.section-heading p {
+  margin: 4px 0 0;
+  color: var(--muted-foreground);
+  font-size: 0.92rem;
+}
