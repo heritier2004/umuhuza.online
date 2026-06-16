@@ -22,7 +22,7 @@
   <nav class="navbar navbar-expand-lg container py-2">
     <?php $currentUser = isLoggedIn() ? currentUser() : null; ?>
     <a class="navbar-brand d-flex align-items-center gap-2 fw-bold text-primary me-3" href="?route=home">
-      <span class="brand-mark">UO</span>
+      <img src="public/assets/logo.png" alt="UMUHUZA.ONLINE" style="height: 38px; width: auto; object-fit: contain;" />
       <span class="d-none d-sm-block">
         UMUHUZA.ONLINE
         <small>Local property & trusted services</small>
