@@ -145,11 +145,21 @@
 
             <div class="step-field">
               <label class="form-label">Profile Photo</label>
-              <div class="profile-upload" onclick="document.getElementById('profileImageAgent').click()">
-                <div class="profile-avatar" id="profileAvatarAgent">📷</div>
-                <div class="profile-text">Add Profile Photo</div>
+              <div class="premium-upload-component">
+                <div class="upload-area" id="uploadAreaAgent">
+                  <div class="upload-icon">📁</div>
+                  <div class="upload-text">
+                    <div class="upload-main">Click or drag image here</div>
+                    <div class="upload-sub">PNG, JPG up to 5 MB</div>
+                  </div>
+                  <input type="file" id="profileImageAgent" name="profile_image" accept="image/*" style="display:none;" />
+                </div>
+                <div class="preview-container" id="previewContainerAgent" style="display:none;">
+                  <div class="avatar-circle" id="profileAvatarAgent"></div>
+                  <button type="button" class="btn-remove-image" id="removeImageAgent">&times;</button>
+                  <div class="upload-success">Uploaded successfully</div>
+                </div>
               </div>
-              <input type="file" id="profileImageAgent" name="profile_image" accept="image/*" style="display:none;" />
             </div>
           </div>
 
@@ -203,11 +213,21 @@
             <h5>Optional information</h5>
             <div class="step-field">
               <label class="form-label">Profile Photo</label>
-              <div class="profile-upload" onclick="document.getElementById('profileImageProvider').click()">
-                <div class="profile-avatar" id="profileAvatarProvider">📷</div>
-                <div class="profile-text">Add Profile Photo</div>
+              <div class="premium-upload-component">
+                <div class="upload-area" id="uploadAreaProvider">
+                  <div class="upload-icon">📁</div>
+                  <div class="upload-text">
+                    <div class="upload-main">Click or drag image here</div>
+                    <div class="upload-sub">PNG, JPG up to 5 MB</div>
+                  </div>
+                  <input type="file" id="profileImageProvider" name="profile_image" accept="image/*" style="display:none;" />
+                </div>
+                <div class="preview-container" id="previewContainerProvider" style="display:none;">
+                  <div class="avatar-circle" id="profileAvatarProvider"></div>
+                  <button type="button" class="btn-remove-image" id="removeImageProvider">&times;</button>
+                  <div class="upload-success">Uploaded successfully</div>
+                </div>
               </div>
-              <input type="file" id="profileImageProvider" name="profile_image" accept="image/*" style="display:none;" />
             </div>
           </div>
 
@@ -225,5 +245,4 @@
     </div>
   </div>
 </section>
-
 <?php include __DIR__ . '/../layouts/footer.php'; ?>

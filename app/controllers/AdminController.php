@@ -108,6 +108,10 @@ class AdminController {
         Payment::updateStatus($pdo, $paymentId, 'approved');
         $this->activatePlanForUser($pdo, (int) $payment['user_id'], (int) $payment['plan_id']);
 
+        // Audit log (Fix 3)
+        AdminLog::log($pdo, (int)($_SESSION['user_id'] ?? 0), 'APPROVE_PAYMENT', 'payment', (int)$paymentId,
+            ['status' => 'pending'], ['status' => 'approved'], 'Manual payment verification approved');
+
         flash('success', 'Payment approved and subscription activated.');
         header('Location: ?route=admin-dashboard');
         exit;
@@ -130,6 +134,11 @@ class AdminController {
 
         Payment::updateStatus($pdo, $paymentId, 'rejected');
         NotificationModel::create($pdo, (int) $payment['user_id'], 'Your plan upgrade request was rejected. Please contact support for details.');
+
+        // Audit log (Fix 3)
+        AdminLog::log($pdo, (int)($_SESSION['user_id'] ?? 0), 'REJECT_PAYMENT', 'payment', (int)$paymentId,
+            ['status' => 'pending'], ['status' => 'rejected'], 'Manual payment verification rejected');
+
         flash('success', 'Payment rejected.');
         header('Location: ?route=admin-dashboard');
         exit;
@@ -148,6 +157,9 @@ class AdminController {
             if ($listing) {
                 NotificationModel::create($pdo, (int)$listing['user_id'], "Your listing '" . $listing['title'] . "' was approved and is now active.");
             }
+            // Audit log (Fix 3)
+            AdminLog::log($pdo, (int)($_SESSION['user_id'] ?? 0), 'APPROVE_LISTING', 'listing', (int)$id,
+                ['status' => 'pending'], ['status' => 'active'], 'Listing approved for marketplace');
         }
         flash('success', 'Listing approved successfully.');
         header('Location: ?route=admin-dashboard');
@@ -167,6 +179,9 @@ class AdminController {
             if ($listing) {
                 NotificationModel::create($pdo, (int)$listing['user_id'], "Your listing '" . $listing['title'] . "' was rejected. Please review our guidelines.");
             }
+            // Audit log (Fix 3)
+            AdminLog::log($pdo, (int)($_SESSION['user_id'] ?? 0), 'REJECT_LISTING', 'listing', (int)$id,
+                ['status' => 'pending'], ['status' => 'rejected'], 'Listing rejected - violates guidelines');
         }
         flash('success', 'Listing rejected.');
         header('Location: ?route=admin-dashboard');
@@ -207,6 +222,9 @@ class AdminController {
                 $pdo->prepare('UPDATE verification_requests SET status = "approved" WHERE id = ?')->execute([(int)$id]);
                 User::updateStatus($pdo, $req['user_id'], 'active');
                 NotificationModel::create($pdo, (int)$req['user_id'], 'Your provider profile was verified successfully.');
+                // Audit log (Fix 3)
+                AdminLog::log($pdo, (int)($_SESSION['user_id'] ?? 0), 'APPROVE_VERIFICATION', 'user', (int)$req['user_id'],
+                    ['verified' => false], ['verified' => true], 'Provider verification approved');
             }
         }
         flash('success', 'Provider verified successfully.');
@@ -228,6 +246,9 @@ class AdminController {
             if ($req) {
                 $pdo->prepare('UPDATE verification_requests SET status = "rejected" WHERE id = ?')->execute([(int)$id]);
                 NotificationModel::create($pdo, (int)$req['user_id'], 'Your verification request was rejected. Please upload valid documents.');
+                // Audit log (Fix 3)
+                AdminLog::log($pdo, (int)($_SESSION['user_id'] ?? 0), 'REJECT_VERIFICATION', 'user', (int)$req['user_id'],
+                    ['verified' => false], ['verified' => false], 'Provider verification rejected - invalid documents');
             }
         }
         flash('success', 'Verification rejected.');
@@ -245,8 +266,12 @@ class AdminController {
         if ($pdo) {
             $user = User::findById($pdo, $id);
             if ($user) {
+                $oldStatus = $user['status'];
                 $newStatus = ($user['status'] === 'active') ? 'suspended' : 'active';
                 User::updateStatus($pdo, $id, $newStatus);
+                // Audit log (Fix 3)
+                AdminLog::log($pdo, (int)($_SESSION['user_id'] ?? 0), 'TOGGLE_USER_STATUS', 'user', (int)$id,
+                    ['status' => $oldStatus], ['status' => $newStatus], 'User status changed by admin');
             }
         }
         flash('success', 'User status updated.');

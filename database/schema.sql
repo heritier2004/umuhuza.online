@@ -196,6 +196,21 @@ CREATE TABLE IF NOT EXISTS verification_requests (
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS admin_logs (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  admin_id INT NOT NULL,
+  action VARCHAR(100) NOT NULL,
+  entity_type VARCHAR(50) NOT NULL,
+  entity_id INT NOT NULL,
+  old_value TEXT NULL,
+  new_value TEXT NULL,
+  reason TEXT NULL,
+  ip_address VARCHAR(45) NULL,
+  user_agent VARCHAR(255) NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (admin_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 INSERT INTO plans (name, price, duration_months, listing_limit, featured, ranking_priority) VALUES
 ('Free', 0, 1, 5, 0, 1),
 ('Premium', 150000, 1, 20, 1, 2),

@@ -23,6 +23,28 @@ class PaymentController {
                 exit;
             }
 
+            // Validate transaction ID format (Fix 2)
+            // Mobile Money: 10-15 digits | Bank Transfer: 2 uppercase letters + 14 digits (e.g. BK20260610001234)
+            $isValidMobileMoney  = (bool) preg_match('/^\d{10,15}$/', $transactionId);
+            $isValidBankTransfer = (bool) preg_match('/^[A-Z]{2}\d{14}$/', $transactionId);
+
+            if (!$isValidMobileMoney && !$isValidBankTransfer) {
+                flash('error', 'Invalid transaction ID format. Use a mobile money ID (10–15 digits) or a bank reference such as BK20260610001234.');
+                header('Location: ?route=provider-dashboard');
+                exit;
+            }
+
+            // Reject duplicate transaction IDs
+            if ($pdo) {
+                $dupStmt = $pdo->prepare('SELECT id FROM payments WHERE transaction_id = ? LIMIT 1');
+                $dupStmt->execute([$transactionId]);
+                if ($dupStmt->fetch()) {
+                    flash('error', 'This transaction ID has already been submitted. Please use a different transaction ID.');
+                    header('Location: ?route=provider-dashboard');
+                    exit;
+                }
+            }
+
             Payment::create($pdo, [
                 'user_id' => $_SESSION['user_id'],
                 'plan_id' => $planId,

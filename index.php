@@ -18,6 +18,7 @@ require_once __DIR__ . '/app/models/Plan.php';
 require_once __DIR__ . '/app/models/Payment.php';
 require_once __DIR__ . '/app/models/Notification.php';
 require_once __DIR__ . '/app/models/Location.php';
+require_once __DIR__ . '/app/models/AdminLog.php';
 require_once __DIR__ . '/app/controllers/AuthController.php';
 require_once __DIR__ . '/app/controllers/ListingController.php';
 require_once __DIR__ . '/app/controllers/RequestController.php';
@@ -209,15 +210,15 @@ if (!empty($featuredListings)) {
             'category' => $item['category_name'] ?? 'Marketplace',
             'phone' => $item['phone'] ?? '+250788367073',
             'whatsapp' => $item['whatsapp'] ?? '+250788367073',
-            'image' => '#1E40AF',
+            'image' => listingCoverUrl($item),
         ];
     }
 }
 if (empty($heroSlides)) {
     $heroSlides = [
-        ['title' => 'Featured house in Kigali', 'location' => 'Kigali / Gasabo', 'rating' => 4.9, 'badge' => 'Premium', 'category' => 'Real Estate', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'image' => '#1E40AF'],
-        ['title' => 'TV repair specialists', 'location' => 'Kigali / Nyarugenge', 'rating' => 4.8, 'badge' => 'Trending', 'category' => 'Technical Service', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'image' => '#F97316'],
-        ['title' => 'Plumbing and maintenance', 'location' => 'Rwanda / Nationwide', 'rating' => 4.7, 'badge' => 'Popular', 'category' => 'Services', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'image' => '#1E3A8A'],
+        ['title' => 'Featured house in Kigali', 'location' => 'Kigali / Gasabo', 'rating' => 4.9, 'badge' => 'Premium', 'category' => 'Real Estate', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'image' => 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=900&q=80'],
+        ['title' => 'TV repair specialists', 'location' => 'Kigali / Nyarugenge', 'rating' => 4.8, 'badge' => 'Trending', 'category' => 'Technical Service', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'image' => 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80'],
+        ['title' => 'Plumbing and maintenance', 'location' => 'Rwanda / Nationwide', 'rating' => 4.7, 'badge' => 'Popular', 'category' => 'Services', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'image' => 'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=900&q=80'],
     ];
 }
 $trendingServices = [];

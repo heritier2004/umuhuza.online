@@ -23,13 +23,40 @@ const RegistrationWizard = (() => {
       if (stepEl) stepEl.classList.add('active');
     }
 
+    // Enable/disable fields to prevent HTML5 validation issues and name collisions
+    const agentStep = document.getElementById('step4agent');
+    const providerStep = document.getElementById('step4provider');
+    if (agentStep && providerStep) {
+      const agentInputs = agentStep.querySelectorAll('input, select, textarea');
+      const providerInputs = providerStep.querySelectorAll('input, select, textarea');
+      
+      if (step === 4) {
+        if (selectedRole === 'agent') {
+          // Enable agent fields, disable provider fields
+          agentInputs.forEach(input => input.removeAttribute('disabled'));
+          providerInputs.forEach(input => input.setAttribute('disabled', 'true'));
+        } else {
+          // Enable provider fields, disable agent fields
+          providerInputs.forEach(input => input.removeAttribute('disabled'));
+          agentInputs.forEach(input => input.setAttribute('disabled', 'true'));
+        }
+      } else {
+        // Not on step 4, disable both to prevent any premature validation/submissions
+        agentInputs.forEach(input => input.setAttribute('disabled', 'true'));
+        providerInputs.forEach(input => input.setAttribute('disabled', 'true'));
+      }
+    }
+
     // Update progress bar
     const progress = (step / 4) * 100;
-    document.getElementById('progressBarFill').style.width = progress + '%';
-    document.getElementById('stepIndicator').textContent = `Step ${step} of 4`;
+    const progressBarFill = document.getElementById('progressBarFill');
+    if (progressBarFill) progressBarFill.style.width = progress + '%';
+    const stepIndicator = document.getElementById('stepIndicator');
+    if (stepIndicator) stepIndicator.textContent = `Step ${step} of 4`;
 
     currentStep = step;
-    document.getElementById('currentStep').value = step;
+    const currentStepInput = document.getElementById('currentStep');
+    if (currentStepInput) currentStepInput.value = step;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -212,50 +239,104 @@ const RegistrationWizard = (() => {
   };
 
   // ===== PROFILE UPLOAD =====
+  const setupPremiumUpload = (uploadAreaId, fileInputId, previewContainerId, avatarCircleId, removeBtnId) => {
+    const uploadArea = document.getElementById(uploadAreaId);
+    const fileInput = document.getElementById(fileInputId);
+    const previewContainer = document.getElementById(previewContainerId);
+    const avatarCircle = document.getElementById(avatarCircleId);
+    const removeBtn = document.getElementById(removeBtnId);
+
+    if (!uploadArea || !fileInput || !previewContainer || !avatarCircle || !removeBtn) return;
+
+    // Click to select
+    uploadArea.addEventListener('click', () => {
+      fileInput.click();
+    });
+
+    // File input change
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        handleFile(file);
+      }
+    });
+
+    // Drag-and-drop events
+    ['dragenter', 'dragover'].forEach(eventName => {
+      uploadArea.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        uploadArea.classList.add('drag-over');
+      }, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      uploadArea.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        uploadArea.classList.remove('drag-over');
+      }, false);
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      if (files.length > 0) {
+        const file = files[0];
+        if (validateImageFile(file)) {
+          fileInput.files = files;
+          handleFile(file);
+        }
+      }
+    }, false);
+
+    // Remove button
+    removeBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      resetUpload();
+    });
+
+    const handleFile = (file) => {
+      if (!validateImageFile(file)) {
+        resetUpload();
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        avatarCircle.style.backgroundImage = `url('${event.target.result}')`;
+        uploadArea.style.display = 'none';
+        previewContainer.style.display = 'flex';
+      };
+      reader.readAsDataURL(file);
+    };
+
+    const resetUpload = () => {
+      fileInput.value = '';
+      avatarCircle.style.backgroundImage = '';
+      uploadArea.style.display = 'flex';
+      previewContainer.style.display = 'none';
+    };
+  };
+
   const initializeProfileUpload = () => {
-    // Agent profile upload
-    const agentInput = document.getElementById('profileImageAgent');
-    const agentAvatar = document.getElementById('profileAvatarAgent');
-    
-    if (agentInput && agentAvatar) {
-      agentInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file && validateImageFile(file)) {
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            agentAvatar.style.backgroundImage = `url('${event.target.result}')`;
-            agentAvatar.textContent = '';
-          };
-          reader.readAsDataURL(file);
-        }
-      });
+    // Setup for Agent
+    setupPremiumUpload(
+      'uploadAreaAgent',
+      'profileImageAgent',
+      'previewContainerAgent',
+      'profileAvatarAgent',
+      'removeImageAgent'
+    );
 
-      agentAvatar.parentElement.addEventListener('click', () => {
-        agentInput.click();
-      });
-    }
-
-    // Provider profile upload
-    const providerInput = document.getElementById('profileImageProvider');
-    const providerAvatar = document.getElementById('profileAvatarProvider');
-    
-    if (providerInput && providerAvatar) {
-      providerInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file && validateImageFile(file)) {
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            providerAvatar.style.backgroundImage = `url('${event.target.result}')`;
-            providerAvatar.textContent = '';
-          };
-          reader.readAsDataURL(file);
-        }
-      });
-
-      providerAvatar.parentElement.addEventListener('click', () => {
-        providerInput.click();
-      });
-    }
+    // Setup for Provider
+    setupPremiumUpload(
+      'uploadAreaProvider',
+      'profileImageProvider',
+      'previewContainerProvider',
+      'profileAvatarProvider',
+      'removeImageProvider'
+    );
   };
 
   const validateImageFile = (file) => {
@@ -290,6 +371,7 @@ const RegistrationWizard = (() => {
       showStep(step - 1);
     },
     init: () => {
+      if (!document.getElementById('wizardForm')) return;
       initializeProfileUpload();
       showStep(1);
     }

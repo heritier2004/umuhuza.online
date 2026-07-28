@@ -1,8 +1,8 @@
 <?php include __DIR__ . '/../layouts/header.php'; ?>
 <?php
 $heroSlides = $heroSlides ?? [
-  ['title' => 'Shakisha Inzu n\'Abatanga Serivisi Bizewe Mu Rwanda', 'location' => 'Kigali / Gasabo', 'rating' => 4.9, 'badge' => 'Premium', 'category' => 'Real Estate', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'image' => '#1E40AF'],
-  ['title' => 'Tangira Abatanga Serivisi Mwiza', 'location' => 'Kigali / Nyarugenge', 'rating' => 4.8, 'badge' => 'Trending', 'category' => 'Technical Service', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'image' => '#F97316'],
+  ['title' => 'Shakisha Inzu n\'Abatanga Serivisi Bizewe Mu Rwanda', 'location' => 'Kigali / Gasabo', 'rating' => 4.9, 'badge' => 'Premium', 'category' => 'Real Estate', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'image' => 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=900&q=80'],
+  ['title' => 'Tangira Abatanga Serivisi Mwiza', 'location' => 'Kigali / Nyarugenge', 'rating' => 4.8, 'badge' => 'Trending', 'category' => 'Technical Service', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'image' => 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80'],
 ];
 $nearbyListings = $nearbyListings ?? [];
 $featuredListings = $featuredListings ?? [];
@@ -22,7 +22,16 @@ $trendingServices = [];
 <section class="container py-3 home-feed-shell">
   <div class="hero-slider card-hover" id="heroSlider">
     <?php foreach ($heroSlides as $index => $slide): ?>
-      <article class="hero-slide <?= $index === 0 ? 'active' : '' ?>" style="background:<?= e($slide['image']) ?>;">
+      <?php 
+        $bgStyle = '';
+        $bgValue = $slide['image'] ?? '';
+        if (strpos($bgValue, '#') === 0) {
+          $bgStyle = 'background-color: ' . $bgValue . ';';
+        } else {
+          $bgStyle = 'background-image: url(' . $bgValue . '); background-size: cover; background-position: center;';
+        }
+      ?>
+      <article class="hero-slide <?= $index === 0 ? 'active' : '' ?>" style="<?= e($bgStyle) ?>">
         <div class="hero-slide-overlay"></div>
         <div class="hero-slide-content">
           <p class="hero-eyebrow"><?= e($slide['badge'] ?? 'Featured') ?> • <?= e($slide['category'] ?? 'Marketplace') ?></p>
@@ -116,7 +125,11 @@ $trendingServices = [];
         $planBadgeText = 'PREMIUM';
       }
     ?>
-      <article class="listing-card card-hover" data-listing-kind="<?= $isAgent ? 'agent' : 'service' ?>" data-plan-tier="<?= strpos($planTier, 'super') !== false ? 'super-premium' : (strpos($planTier, 'premium') !== false ? 'premium' : 'standard') ?>">
+      <article class="listing-card card-hover" 
+               data-listing-kind="<?= $isAgent ? 'agent' : 'service' ?>" 
+               data-plan-tier="<?= strpos($planTier, 'super') !== false ? 'super-premium' : (strpos($planTier, 'premium') !== false ? 'premium' : 'standard') ?>"
+               data-province="<?= e($item['province'] ?? '') ?>"
+               data-district="<?= e($item['district'] ?? '') ?>">
         <img class="listing-visual" src="<?= e(listingCoverUrl($item)) ?>" alt="<?= e($item['title']) ?>" />
         <div class="listing-content">
           <div class="d-flex justify-content-between align-items-center mb-2">

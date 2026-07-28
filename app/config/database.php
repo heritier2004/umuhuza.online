@@ -62,7 +62,8 @@ if ($pdo) {
             'plans', 'users', 'user_plans', 'categories', 'provinces', 
             'districts', 'sectors', 'cells', 'service_areas', 'listings', 
             'listing_images', 'requests', 'request_matches', 'listing_views', 
-            'listing_contacts', 'payments', 'notifications', 'verification_requests'
+            'listing_contacts', 'payments', 'notifications', 'verification_requests',
+            'admin_logs'
         ];
         
         $hasMissingTable = false;
