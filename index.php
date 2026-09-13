@@ -221,7 +221,6 @@ if (empty($heroSlides)) {
         ['title' => 'Plumbing and maintenance', 'location' => 'Rwanda / Nationwide', 'rating' => 4.7, 'badge' => 'Popular', 'category' => 'Services', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'image' => 'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=900&q=80'],
     ];
 }
-$trendingServices = [];
 switch ($route) {
     case 'listings':
         $listings = $ranked;

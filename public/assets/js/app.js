@@ -90,7 +90,49 @@ document.addEventListener('DOMContentLoaded', function () {
       describe_need: 'Describe your need',
       send_request: 'Send request',
       call: 'Call',
-      view_details: 'View details'
+      view_details: 'View details',
+      tagline: 'Connecting People & Services',
+      filter_all: 'All',
+      filter_agents: 'Agents',
+      filter_services: 'Service Providers',
+      about_eyebrow: 'About our system',
+      about_main_title: 'A simple marketplace that keeps Rwanda connected',
+      about_main_desc: 'Our platform brings property listings, trusted service providers, and request submissions into one clear flow so buyers, renters, agents, and local businesses can find what they need faster.',
+      about_card1_title: 'Fast discovery',
+      about_card1_desc: 'Search by location, category, price, or keyword without complicated steps.',
+      about_card2_title: 'Trusted local providers',
+      about_card2_desc: 'See verified profiles, ratings, and direct contact options for quick follow-up.',
+      about_card3_title: 'Simple request flow',
+      about_card3_desc: 'Submit a request in seconds and connect with the right people around Rwanda.',
+      about_why_title: 'Why it works well',
+      about_why_1: 'Responsive layout for desktop, tablet, and mobile.',
+      about_why_2: 'Clear sections for listings, requests, and provider discovery.',
+      about_why_3: 'Designed to keep the system easy to scan and use.',
+      hero_verified_agents: 'Verified Agents',
+      hero_verified_providers: 'Verified Service Providers',
+      hero_secure_marketplace: 'Secure Marketplace',
+      hero_fast_requests: 'Fast Requests',
+      badge_verified: 'Verified',
+      premium_visibility: 'Premium visibility',
+      marketplace_trusted: 'Marketplace trusted',
+      recent_activity_sub: 'New listings and live requests from the community.',
+      join_title: 'Ready to join UMUHUZA.ONLINE?',
+      join_sub: 'Choose your role and start connecting with buyers, renters, or service seekers today.',
+      become_agent: 'Become an Agent',
+      become_agent_desc: 'Sell or rent properties and reach verified buyers and renters across Rwanda',
+      get_started: 'Get started',
+      become_provider: 'Become a Service Provider',
+      become_provider_desc: 'Offer your services and receive direct requests from clients who need your expertise',
+      browse_connect: 'Browse & Connect',
+      browse_connect_desc: 'Find trusted agents, service providers, and post requests for the services you need',
+      explore_now: 'Explore now',
+      footer_about_title: 'About UMUHUZA.ONLINE',
+      footer_about_desc: 'UMUHUZA.ONLINE is a local property and service platform that helps buyers, renters, agents, and service providers discover trusted opportunities, request help, and connect faster in Rwanda.',
+      quick_links: 'Quick Links',
+      provider_registration_link: 'Provider Registration',
+      contact: 'Contact',
+      terms_privacy: 'Terms & Privacy',
+      badge_new: 'New'
     },
     rw: {
       register_intro: 'Tangira nka umukozi wa marketplace cyangwa umuhanga kandi ukore ibiranga neza.',
@@ -182,7 +224,49 @@ document.addEventListener('DOMContentLoaded', function () {
       describe_need: 'Sobanura ibyo ukenera',
       send_request: 'Ohereza icyifuzo',
       call: 'Hamagara',
-      view_details: 'Reba ibisobanuro'
+      view_details: 'Reba ibisobanuro',
+      tagline: 'Guhuza Abantu n\'Serivisi',
+      filter_all: 'Byose',
+      filter_agents: 'Abakozi',
+      filter_services: 'Abatanga Serivisi',
+      about_eyebrow: 'Ibyerekeye sisitemu yacu',
+      about_main_title: 'Isoko ryoroshye rihuza abanyarwanda',
+      about_main_desc: 'Urutonde rwacu ruhuza ibyatangazo by\'imitungo, abatanga serivisi bizewe, n\'ibisabwa mu buryo bumwe bworoheye buri wese.',
+      about_card1_title: 'Gushaka vuba',
+      about_card1_desc: 'Shakisha ukurikije ahantu, icyiciro, igiciro cyangwa ijambo ry\'ingenzi.',
+      about_card2_title: 'Abatanga serivisi bizewe',
+      about_card2_desc: 'Reba imyirondoro yemewe, amanota, n\'uburyo bwo guhita ubahamagara.',
+      about_card3_title: 'Uburyo bworoshye bwo gusaba',
+      about_card3_desc: 'Ohereza icyifuzo mu masaha make uhuzwe n\'abantu bakwiriye mu Rwanda.',
+      about_why_title: 'Impamvu ikora neza',
+      about_why_1: 'Ikora neza kuri mudasobwa, tabulete, no kuri telefone.',
+      about_why_2: 'Ibyiciro bisobanutse by\'ibyatangazo, ibisabwa, n\'abatanga serivisi.',
+      about_why_3: 'Yateguwe kugira ngo yorohere buri wese gukoresha.',
+      hero_verified_agents: 'Abakozi Bemewe',
+      hero_verified_providers: 'Abatanga Serivisi Bemewe',
+      hero_secure_marketplace: 'Isoko Yizewe',
+      hero_fast_requests: 'Ibisabwa Yihuse',
+      badge_verified: 'Yemewe',
+      premium_visibility: 'Kugaragara neza',
+      marketplace_trusted: 'Isoko yizewe',
+      recent_activity_sub: 'Ibyatangazwa bishya n\'ibisabwa bishya mu muryango.',
+      join_title: 'Witeguye kwinjira muri UMUHUZA.ONLINE?',
+      join_sub: 'Hitamo uruhare rwawe uhatangire guhuza n\'abaguzi, abakodesha cyangwa abashaka serivisi.',
+      become_agent: 'Ba Umukozi w\'Umutungo',
+      become_agent_desc: 'Gura cyangwa ukodeshe imitungo ugemure abaguzi n\'abakodesha mu Rwanda',
+      get_started: 'Tangira ubu',
+      become_provider: 'Ba Umutanga Serivisi',
+      become_provider_desc: 'Tanga serivisi zawe wakire ibisabwa biturutse ku bakiriya bashaka ubuhanga bwawe',
+      browse_connect: 'Shakisha & Uhuzwe',
+      browse_connect_desc: 'Shaka abakozi bizewe, abatanga serivisi, woshyireho n\'ibisabwa ukeneye',
+      explore_now: 'Shakisha ubu',
+      footer_about_title: 'Ibyerekeye UMUHUZA.ONLINE',
+      footer_about_desc: 'UMUHUZA.ONLINE ni urutonde rwa serivisi n\'imitungo rufasha abaguzi, abakodesha, abakozi n\'abatanga serivisi kubona amahirwe yizewe no guhuzwa vuba mu Rwanda.',
+      quick_links: 'Ibyerekezo',
+      provider_registration_link: 'Kwiyandikisha nka Provider',
+      contact: 'Tuvugishe',
+      terms_privacy: 'Amategeko & Umutekano',
+      badge_new: 'Gishya'
     }
   };
 
@@ -535,6 +619,36 @@ document.addEventListener('DOMContentLoaded', function () {
       fetchIpLocation();
     }
   };
+
+  // Global File Upload Validation (Min 5 KB, Max 3 MB)
+  document.querySelectorAll('input[type="file"]').forEach(function (input) {
+    input.addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const minBytes = Number(input.dataset.minBytes || 5120);     // Default 5 KB
+      const maxBytes = Number(input.dataset.maxBytes || 3145728);  // Default 3 MB
+
+      if (file.size < minBytes) {
+        alert('File is too small (' + (file.size / 1024).toFixed(1) + ' KB). Minimum size allowed is 5 KB to prevent empty or corrupt files.');
+        input.value = '';
+        return false;
+      }
+
+      if (file.size > maxBytes) {
+        alert('File is too large (' + (file.size / (1024 * 1024)).toFixed(2) + ' MB). Maximum allowed size is 3 MB to protect system speed and bandwidth.');
+        input.value = '';
+        return false;
+      }
+
+      const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+      if (file.type && !validTypes.includes(file.type)) {
+        alert('Invalid file format. Only JPG, PNG, WEBP, and GIF images are allowed.');
+        input.value = '';
+        return false;
+      }
+    });
+  });
 
   detectLocation();
 });

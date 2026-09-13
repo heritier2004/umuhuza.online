@@ -38,8 +38,18 @@ class ListingController {
             try {
                 // Begin transaction
                 $pdo->beginTransaction();
-                // Handle image upload
-                $imagePath = handleUpload($_FILES['image'] ?? null);
+                // Handle image upload with size & type validation
+                $imagePath = null;
+                if (isset($_FILES['image']) && ($_FILES['image']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
+                    $uploadResult = handleUploadDetailed($_FILES['image']);
+                    if (!$uploadResult['success']) {
+                        flash('error', $uploadResult['error']);
+                        header('Location: ?route=provider-dashboard');
+                        exit;
+                    }
+                    $imagePath = $uploadResult['path'];
+                }
+                
                 // Insert listing with correct plan ID
                 $listingId = Listing::create($pdo, [
                     'user_id' => $user['id'],

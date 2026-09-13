@@ -187,16 +187,24 @@ const PremiumOnboarding = (() => {
     const handleFileSelect = (file) => {
       selectedFile = file;
 
-      // Validate file size (5MB = 5242880 bytes)
-      if (file.size > 5242880) {
-        alert('File size must be less than 5MB.');
+      // Validate min file size (5 KB = 5120 bytes)
+      if (file.size < 5120) {
+        alert('File is too small (' + (file.size / 1024).toFixed(1) + ' KB). Minimum size allowed is 5 KB.');
+        resetUpload();
+        return;
+      }
+
+      // Validate max file size (3 MB = 3145728 bytes)
+      if (file.size > 3145728) {
+        alert('File is too large (' + (file.size / (1024 * 1024)).toFixed(2) + ' MB). Maximum size allowed is 3 MB to preserve system speed.');
         resetUpload();
         return;
       }
 
       // Validate file type
-      if (!file.type.startsWith('image/')) {
-        alert('Please select an image file (JPG, PNG, GIF).');
+      const allowed = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+      if (!file.type || !allowed.includes(file.type)) {
+        alert('Please select a valid image file (JPG, PNG, WEBP, GIF).');
         resetUpload();
         return;
       }

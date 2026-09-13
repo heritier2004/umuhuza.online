@@ -17,7 +17,7 @@ $categories = $categories ?? [
   ['icon' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 7h18M6 7v10m12-10v10M8 17h8"/><path d="M7 12h10"/></svg>', 'title' => 'Logistics', 'slug' => 'logistics', 'subtitle' => 'Transport and delivery services'],
   ['icon' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 7h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><path d="M8 11h8M8 15h5"/></svg>', 'title' => 'General Services', 'slug' => 'services', 'subtitle' => 'Cleaning, events, and daily help'],
 ];
-$trendingServices = [];
+$requests = $requests ?? [];
 ?>
 <section class="container py-3 home-feed-shell">
   <div class="hero-slider card-hover" id="heroSlider">
@@ -38,25 +38,25 @@ $trendingServices = [];
           <h1><?= e($slide['title'] ?? 'Marketplace listing') ?></h1>
           <p><?= e($slide['location'] ?? 'Rwanda') ?> • <?= e($slide['rating'] ?? '4.5') ?> ★</p>
           <div class="hero-actions">
-            <a class="btn btn-light btn-sm" href="tel:<?= e($slide['phone'] ?? '+250788367073') ?>">Call</a>
-            <a class="btn btn-success btn-sm" href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $slide['whatsapp'] ?? '+250788367073') ?>">WhatsApp</a>
+            <a class="btn btn-light btn-sm" href="tel:<?= e($slide['phone'] ?? '+250788367073') ?>" data-i18n="call">Call</a>
+            <a class="btn btn-success btn-sm" href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $slide['whatsapp'] ?? '+250788367073') ?>" data-i18n="whatsapp">WhatsApp</a>
           </div>
           <div class="hero-trust-indicators">
             <a href="?route=listings&category=Real+Estate" class="hero-trust-item">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-              Verified Agents
+              <span data-i18n="hero_verified_agents">Verified Agents</span>
             </a>
             <a href="?route=listings" class="hero-trust-item">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-              Verified Service Providers
+              <span data-i18n="hero_verified_providers">Verified Service Providers</span>
             </a>
             <a href="?route=listings" class="hero-trust-item">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-              Secure Marketplace
+              <span data-i18n="hero_secure_marketplace">Secure Marketplace</span>
             </a>
             <a href="#requestModal" data-bs-toggle="modal" class="hero-trust-item">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-              Fast Requests
+              <span data-i18n="hero_fast_requests">Fast Requests</span>
             </a>
           </div>
         </div>
@@ -98,8 +98,7 @@ $trendingServices = [];
     <div id="locationHint" class="small text-muted-custom mt-2" data-i18n="location_hint">Auto-detecting your location for nearby listings...</div>
   </div>
 
-  <!-- Marketplace Tabs -->
-  <div class="marketplace-tabs"></div>
+
 
 </section>
 
@@ -245,33 +244,33 @@ $trendingServices = [];
 <section class="conversion-section">
   <div class="container">
     <div style="text-align: center; margin-bottom: 32px;">
-      <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 12px; color: #0f172a;">Ready to join UMUHUZA.ONLINE?</h2>
-      <p style="color: #475569; font-size: 1rem; max-width: 500px; margin: 0 auto;">Choose your role and start connecting with buyers, renters, or service seekers today.</p>
+      <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 12px; color: #0f172a;" data-i18n="join_title">Ready to join UMUHUZA.ONLINE?</h2>
+      <p style="color: #475569; font-size: 1rem; max-width: 500px; margin: 0 auto;" data-i18n="join_sub">Choose your role and start connecting with buyers, renters, or service seekers today.</p>
     </div>
     <div class="conversion-cards-grid">
       <div class="conversion-card agent-card">
         <div class="conversion-card-icon">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--primary);"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         </div>
-        <h3>Become an Agent</h3>
-        <p>Sell or rent properties and reach verified buyers and renters across Rwanda</p>
-        <a href="?route=register" class="btn btn-outline-primary btn-sm">Get started</a>
+        <h3 data-i18n="become_agent">Become an Agent</h3>
+        <p data-i18n="become_agent_desc">Sell or rent properties and reach verified buyers and renters across Rwanda</p>
+        <a href="?route=register" class="btn btn-outline-primary btn-sm" data-i18n="get_started">Get started</a>
       </div>
       <div class="conversion-card">
         <div class="conversion-card-icon">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--primary);"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
         </div>
-        <h3>Become a Service Provider</h3>
-        <p>Offer your services and receive direct requests from clients who need your expertise</p>
-        <a href="?route=register" class="btn btn-outline-primary btn-sm">Get started</a>
+        <h3 data-i18n="become_provider">Become a Service Provider</h3>
+        <p data-i18n="become_provider_desc">Offer your services and receive direct requests from clients who need your expertise</p>
+        <a href="?route=register" class="btn btn-outline-primary btn-sm" data-i18n="get_started">Get started</a>
       </div>
       <div class="conversion-card">
         <div class="conversion-card-icon">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--primary);"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
         </div>
-        <h3>Browse & Connect</h3>
-        <p>Find trusted agents, service providers, and post requests for the services you need</p>
-        <a href="?route=listings" class="btn btn-outline-primary btn-sm">Explore now</a>
+        <h3 data-i18n="browse_connect">Browse & Connect</h3>
+        <p data-i18n="browse_connect_desc">Find trusted agents, service providers, and post requests for the services you need</p>
+        <a href="?route=listings" class="btn btn-outline-primary btn-sm" data-i18n="explore_now">Explore now</a>
       </div>
     </div>
   </div>
@@ -294,5 +293,5 @@ $trendingServices = [];
   </div>
 </section>
 
-<div class="modal fade" id="requestModal" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content rounded-4"><div class="modal-header border-0"><div><h5 class="modal-title fw-bold" data-i18n="request_form_title">Request form</h5><p class="text-muted-custom small mb-0" data-i18n="request_form_sub">Fast, public, and no login required</p></div><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><form method="POST" action="?route=submit-request" class="row g-3"> <input type="hidden" name="route" value="submit-request" /> <input type="hidden" name="csrf_token" value="<?= e(generateCsrfToken()) ?>" /> <div class="col-md-6"><input class="form-control" name="name" data-i18n-placeholder="full_name" placeholder="Full name" required /></div><div class="col-md-6"><input class="form-control" name="phone" data-i18n-placeholder="phone_number" placeholder="Phone number" required /></div><div class="col-md-6"><input class="form-control" name="whatsapp" data-i18n-placeholder="whatsapp" placeholder="WhatsApp" /></div><div class="col-md-6"><input class="form-control" name="type" data-i18n-placeholder="request_type" placeholder="Request type" /></div><div class="col-md-6"><input class="form-control" name="province" data-i18n-placeholder="province" placeholder="Province" /></div><div class="col-md-6"><input class="form-control" name="district" data-i18n-placeholder="district" placeholder="District" /></div><div class="col-12"><input class="form-control" name="budget" data-i18n-placeholder="budget" placeholder="Budget" /></div><div class="col-12"><textarea class="form-control" name="description" rows="4" data-i18n-placeholder="describe_need" placeholder="Describe your need" required></textarea></div><div class="col-12 text-end"><button class="btn btn-primary" type="submit" data-i18n="send_request">Send request</button></div></form></div></div></div></div>
+
 <?php include __DIR__ . '/../layouts/footer.php'; ?>

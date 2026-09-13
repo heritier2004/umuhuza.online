@@ -63,9 +63,14 @@ class AuthController {
                 exit;
             }
             
-            $profileImage = handleUpload($_FILES['profile_image'] ?? null);
-            if ($profileImage) {
-                $data['profile_image'] = $profileImage;
+            if (isset($_FILES['profile_image']) && ($_FILES['profile_image']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
+                $uploadResult = handleUploadDetailed($_FILES['profile_image']);
+                if (!$uploadResult['success']) {
+                    flash('error', $uploadResult['error']);
+                    header('Location: ?route=register');
+                    exit;
+                }
+                $data['profile_image'] = $uploadResult['path'];
             }
             if (User::findByEmail($pdo, $data['email'])) {
                 flash('error', 'Email already exists.');

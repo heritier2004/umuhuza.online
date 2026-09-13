@@ -24,7 +24,7 @@
     <a class="navbar-brand d-flex align-items-center gap-3 me-3" href="?route=home">
       <img src="public/assets/logo_wide.png?v=<?= filemtime(__DIR__ . '/../../public/assets/logo_wide.png') ?>" alt="UMUHUZA.ONLINE" style="height: 48px; width: auto; object-fit: contain; max-height: 48px;" />
       <span class="d-none d-lg-block text-muted-custom" style="font-size: 0.85rem; border-left: 1px solid rgba(15, 23, 42, 0.12); padding-left: 14px; font-weight: 500; letter-spacing: 0.03em;">
-        Connecting People & Services
+        <span data-i18n="tagline">Connecting People & Services</span>
       </span>
     </a>
     <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,9 +38,9 @@
       </form>
       <div class="header-nav d-flex flex-wrap align-items-center gap-2 ms-auto">
         <div class="header-filter-group d-flex align-items-center gap-1 me-2" role="tablist" aria-label="Marketplace filters">
-          <button type="button" class="header-filter-chip active" data-market-filter="all">All</button>
-          <button type="button" class="header-filter-chip" data-market-filter="agent">Agents</button>
-          <button type="button" class="header-filter-chip" data-market-filter="service">Service Providers</button>
+          <button type="button" class="header-filter-chip active" data-market-filter="all" data-i18n="filter_all">All</button>
+          <button type="button" class="header-filter-chip" data-market-filter="agent" data-i18n="filter_agents">Agents</button>
+          <button type="button" class="header-filter-chip" data-market-filter="service" data-i18n="filter_services">Service Providers</button>
         </div>
         <a class="nav-link" href="?route=listings&q=Real+Estate" data-i18n="real_estate">Real Estate</a>
         <a class="nav-link" href="?route=listings&q=Services" data-i18n="services">Services</a>

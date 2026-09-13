@@ -150,9 +150,9 @@
                   <div class="upload-icon">📁</div>
                   <div class="upload-text">
                     <div class="upload-main">Click or drag image here</div>
-                    <div class="upload-sub">PNG, JPG up to 5 MB</div>
+                    <div class="upload-sub">PNG, JPG, WEBP: 5 KB – 3 MB</div>
                   </div>
-                  <input type="file" id="profileImageAgent" name="profile_image" accept="image/*" style="display:none;" />
+                  <input type="file" id="profileImageAgent" name="profile_image" accept="image/jpeg,image/png,image/webp,image/gif" data-max-bytes="3145728" data-min-bytes="5120" style="display:none;" />
                 </div>
                 <div class="preview-container" id="previewContainerAgent" style="display:none;">
                   <div class="avatar-circle" id="profileAvatarAgent"></div>
@@ -218,9 +218,9 @@
                   <div class="upload-icon">📁</div>
                   <div class="upload-text">
                     <div class="upload-main">Click or drag image here</div>
-                    <div class="upload-sub">PNG, JPG up to 5 MB</div>
+                    <div class="upload-sub">PNG, JPG, WEBP: 5 KB – 3 MB</div>
                   </div>
-                  <input type="file" id="profileImageProvider" name="profile_image" accept="image/*" style="display:none;" />
+                  <input type="file" id="profileImageProvider" name="profile_image" accept="image/jpeg,image/png,image/webp,image/gif" data-max-bytes="3145728" data-min-bytes="5120" style="display:none;" />
                 </div>
                 <div class="preview-container" id="previewContainerProvider" style="display:none;">
                   <div class="avatar-circle" id="profileAvatarProvider"></div>
