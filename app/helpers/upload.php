@@ -100,3 +100,64 @@ function handleUpload($file, $folder = 'public/uploads') {
     $result = handleUploadDetailed($file, $folder);
     return $result['success'] ? $result['path'] : null;
 }
+
+/**
+ * Validates and handles multiple file uploads for a post/listing (Min 1, Max 5 photos).
+ *
+ * @param array $fileArray $_FILES element
+ * @param string $folder Upload directory
+ * @param int $minCount Minimum required photos (default 1)
+ * @param int $maxCount Maximum allowed photos (default 5)
+ * @return array Array with ['success' => bool, 'paths' => array, 'error' => string|null]
+ */
+function handleMultipleUploads($fileArray, $folder = 'public/uploads', $minCount = 1, $maxCount = 5) {
+    if (!isset($fileArray['name']) || empty($fileArray['name'])) {
+        if ($minCount > 0) {
+            return ['success' => false, 'paths' => [], 'error' => "At least {$minCount} photo is required for your post."];
+        }
+        return ['success' => true, 'paths' => [], 'error' => null];
+    }
+
+    // Convert single file or array of files into uniform list
+    $names = is_array($fileArray['name']) ? $fileArray['name'] : [$fileArray['name']];
+    $tmpNames = is_array($fileArray['tmp_name']) ? $fileArray['tmp_name'] : [$fileArray['tmp_name']];
+    $sizes = is_array($fileArray['size']) ? $fileArray['size'] : [$fileArray['size']];
+    $types = is_array($fileArray['type']) ? $fileArray['type'] : [$fileArray['type']];
+    $errors = is_array($fileArray['error']) ? $fileArray['error'] : [$fileArray['error']];
+
+    $validIndices = [];
+    foreach ($errors as $i => $err) {
+        if ($err === UPLOAD_ERR_OK && !empty($tmpNames[$i])) {
+            $validIndices[] = $i;
+        }
+    }
+
+    $uploadedCount = count($validIndices);
+
+    if ($uploadedCount < $minCount) {
+        return ['success' => false, 'paths' => [], 'error' => "At least {$minCount} photo is required for your post."];
+    }
+
+    if ($uploadedCount > $maxCount) {
+        return ['success' => false, 'paths' => [], 'error' => "Maximum of {$maxCount} photos allowed per post."];
+    }
+
+    $paths = [];
+    foreach ($validIndices as $i) {
+        $singleFile = [
+            'name' => $names[$i],
+            'tmp_name' => $tmpNames[$i],
+            'size' => $sizes[$i],
+            'type' => $types[$i],
+            'error' => $errors[$i]
+        ];
+
+        $res = handleUploadDetailed($singleFile, $folder);
+        if (!$res['success']) {
+            return ['success' => false, 'paths' => [], 'error' => $res['error']];
+        }
+        $paths[] = $res['path'];
+    }
+
+    return ['success' => true, 'paths' => $paths, 'error' => null];
+}

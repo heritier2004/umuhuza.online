@@ -620,32 +620,49 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   };
 
-  // Global File Upload Validation (Min 5 KB, Max 3 MB)
+  // Global File Upload Validation (Count: Min 1, Max 5 | Size: Min 5 KB, Max 3 MB per file)
   document.querySelectorAll('input[type="file"]').forEach(function (input) {
     input.addEventListener('change', function (e) {
-      const file = e.target.files[0];
-      if (!file) return;
+      const files = Array.from(e.target.files || []);
+      if (!files.length) return;
 
+      const minFiles = Number(input.dataset.minFiles || 0);
+      const maxFiles = Number(input.dataset.maxFiles || 5);
       const minBytes = Number(input.dataset.minBytes || 5120);     // Default 5 KB
       const maxBytes = Number(input.dataset.maxBytes || 3145728);  // Default 3 MB
 
-      if (file.size < minBytes) {
-        alert('File is too small (' + (file.size / 1024).toFixed(1) + ' KB). Minimum size allowed is 5 KB to prevent empty or corrupt files.');
+      if (minFiles > 0 && files.length < minFiles) {
+        alert('Please select at least ' + minFiles + ' photo for your post.');
         input.value = '';
         return false;
       }
 
-      if (file.size > maxBytes) {
-        alert('File is too large (' + (file.size / (1024 * 1024)).toFixed(2) + ' MB). Maximum allowed size is 3 MB to protect system speed and bandwidth.');
+      if (maxFiles > 0 && files.length > maxFiles) {
+        alert('You can select a maximum of ' + maxFiles + ' photos per post.');
         input.value = '';
         return false;
       }
 
       const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
-      if (file.type && !validTypes.includes(file.type)) {
-        alert('Invalid file format. Only JPG, PNG, WEBP, and GIF images are allowed.');
-        input.value = '';
-        return false;
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (file.size < minBytes) {
+          alert('Photo "' + file.name + '" is too small (' + (file.size / 1024).toFixed(1) + ' KB). Minimum allowed size is 5 KB.');
+          input.value = '';
+          return false;
+        }
+
+        if (file.size > maxBytes) {
+          alert('Photo "' + file.name + '" is too large (' + (file.size / (1024 * 1024)).toFixed(2) + ' MB). Maximum allowed size is 3 MB per photo.');
+          input.value = '';
+          return false;
+        }
+
+        if (file.type && !validTypes.includes(file.type)) {
+          alert('Photo "' + file.name + '" is an invalid format. Only JPG, PNG, WEBP, and GIF images are allowed.');
+          input.value = '';
+          return false;
+        }
       }
     });
   });

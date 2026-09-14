@@ -14,7 +14,7 @@ class AdminController {
     }
 
     public function dashboard($pdo) {
-        requireLogin();
+        requireAdmin();
         $listings = Listing::all($pdo);
         $requests = RequestModel::all($pdo);
         $users = $pdo ? $pdo->query('SELECT * FROM users')->fetchAll() : [];

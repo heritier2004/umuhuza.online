@@ -41,20 +41,55 @@ if ($route === 'logout') {
 }
 
 if ($route === 'register-submit') {
+    if (!checkRateLimit('register', 3, 600)) {
+        flash('error', 'Too many registration attempts. Please wait 10 minutes before trying again.');
+        header('Location: ?route=register');
+        exit;
+    }
     (new AuthController())->register($pdo);
 }
 if ($route === 'login-submit') {
+    if (!checkRateLimit('login', 5, 120)) {
+        flash('error', 'Too many login attempts. Please wait 2 minutes before trying again.');
+        header('Location: ?route=login');
+        exit;
+    }
     (new AuthController())->login($pdo);
 }
 if ($route === 'create-listing') {
+    if (!checkRateLimit('create_listing', 10, 3600)) {
+        flash('error', 'Listing creation rate limit reached. Please wait before submitting more listings.');
+        header('Location: ?route=provider-dashboard');
+        exit;
+    }
     (new ListingController())->create($pdo);
 }
 if ($route === 'submit-request') {
+    if (!checkRateLimit('submit_request', 5, 300)) {
+        flash('error', 'Too many request submissions. Please wait 5 minutes before submitting another request.');
+        header('Location: ?route=home');
+        exit;
+    }
     (new RequestController())->submit($pdo);
 }
 if ($route === 'upgrade-plan') {
+    if (!checkRateLimit('upgrade_plan', 5, 300)) {
+        flash('error', 'Too many payment requests. Please wait a few minutes.');
+        header('Location: ?route=provider-dashboard');
+        exit;
+    }
     (new PaymentController())->upgrade($pdo);
 }
+
+// Admin Route Guards & RLS
+$adminRoutes = [
+    'approve-payment', 'reject-payment', 'approve-listing', 'reject-listing',
+    'toggle-featured-listing', 'approve-verification', 'reject-verification', 'toggle-user-status'
+];
+if (in_array($route, $adminRoutes, true)) {
+    requireAdmin();
+}
+
 if ($route === 'approve-payment') {
     (new AdminController())->approvePayment($pdo, (int) ($_GET['payment_id'] ?? 0));
 }

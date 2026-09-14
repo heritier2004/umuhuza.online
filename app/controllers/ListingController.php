@@ -38,16 +38,17 @@ class ListingController {
             try {
                 // Begin transaction
                 $pdo->beginTransaction();
-                // Handle image upload with size & type validation
-                $imagePath = null;
-                if (isset($_FILES['image']) && ($_FILES['image']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
-                    $uploadResult = handleUploadDetailed($_FILES['image']);
+                // Handle image uploads with min/max count (1 to 5 photos) and size validation (5KB - 3MB)
+                $uploadedPaths = [];
+                $fileInput = $_FILES['images'] ?? $_FILES['image'] ?? null;
+                if ($fileInput && (is_array($fileInput['error']) ? !empty(array_filter($fileInput['error'], fn($e) => $e === UPLOAD_ERR_OK)) : ($fileInput['error'] === UPLOAD_ERR_OK))) {
+                    $uploadResult = handleMultipleUploads($fileInput, 'public/uploads', 1, 5);
                     if (!$uploadResult['success']) {
                         flash('error', $uploadResult['error']);
                         header('Location: ?route=provider-dashboard');
                         exit;
                     }
-                    $imagePath = $uploadResult['path'];
+                    $uploadedPaths = $uploadResult['paths'];
                 }
                 
                 // Insert listing with correct plan ID
@@ -63,9 +64,12 @@ class ListingController {
                     'cell' => $cell,
                     'plan_id' => $plan['id'] ?? null,
                 ]);
-                if ($listingId && $imagePath) {
+                
+                if ($listingId && !empty($uploadedPaths)) {
                     $stmt = $pdo->prepare('INSERT INTO listing_images (listing_id, image_path) VALUES (?, ?)');
-                    $stmt->execute([$listingId, $imagePath]);
+                    foreach ($uploadedPaths as $path) {
+                        $stmt->execute([$listingId, $path]);
+                    }
                 }
                 // Commit transaction
                 $pdo->commit();
