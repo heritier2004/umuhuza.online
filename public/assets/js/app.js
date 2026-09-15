@@ -620,7 +620,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   };
 
-  // Global File Upload Validation (Count: Min 1, Max 5 | Size: Min 5 KB, Max 3 MB per file)
+  // Global File Upload Validation (Count: Min 1, Max 5 | Size: Min 5 KB, Max 5 MB per file)
   document.querySelectorAll('input[type="file"]').forEach(function (input) {
     input.addEventListener('change', function (e) {
       const files = Array.from(e.target.files || []);
@@ -629,7 +629,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const minFiles = Number(input.dataset.minFiles || 0);
       const maxFiles = Number(input.dataset.maxFiles || 5);
       const minBytes = Number(input.dataset.minBytes || 5120);     // Default 5 KB
-      const maxBytes = Number(input.dataset.maxBytes || 3145728);  // Default 3 MB
+      const maxBytes = Number(input.dataset.maxBytes || 5242880);  // Default 5 MB
 
       if (minFiles > 0 && files.length < minFiles) {
         alert('Please select at least ' + minFiles + ' photo for your post.');
@@ -653,7 +653,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (file.size > maxBytes) {
-          alert('Photo "' + file.name + '" is too large (' + (file.size / (1024 * 1024)).toFixed(2) + ' MB). Maximum allowed size is 3 MB per photo.');
+          alert('Photo "' + file.name + '" is too large (' + (file.size / (1024 * 1024)).toFixed(2) + ' MB). Maximum allowed size is 5 MB per photo.');
           input.value = '';
           return false;
         }

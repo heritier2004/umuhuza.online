@@ -1,16 +1,112 @@
 <?php
 
-// Upload size constraints (Min 5 KB, Max 3 MB to protect system speed and bandwidth)
+// Upload size constraints (Min 5 KB, Max 5 MB to protect system speed and bandwidth)
 define('UPLOAD_MIN_SIZE_BYTES', 5 * 1024);          // 5 KB
-define('UPLOAD_MAX_SIZE_BYTES', 3 * 1024 * 1024);    // 3 MB
+define('UPLOAD_MAX_SIZE_BYTES', 5 * 1024 * 1024);    // 5 MB
+
+/**
+ * Resizes and compresses an image file to reduce file size while maintaining high visual quality.
+ *
+ * @param string $filePath Full path to target image file
+ * @param string|null $mime MIME type of the image
+ * @param int $maxWidth Maximum allowed width in pixels (default 1920)
+ * @param int $maxHeight Maximum allowed height in pixels (default 1080)
+ * @param int $quality JPEG/WEBP compression quality 0-100 (default 82)
+ * @return bool True if processed or gracefully kept
+ */
+function compressAndResizeImage($filePath, $mime = null, $maxWidth = 1920, $maxHeight = 1080, $quality = 82) {
+    if (!extension_loaded('gd') || !file_exists($filePath)) {
+        return true; // Graceful fallback if GD is not available
+    }
+
+    $imageInfo = @getimagesize($filePath);
+    if (!$imageInfo) {
+        return true;
+    }
+
+    $origWidth = $imageInfo[0];
+    $origHeight = $imageInfo[1];
+    $detectedMime = $imageInfo['mime'] ?? $mime;
+
+    $srcImg = null;
+    switch ($detectedMime) {
+        case 'image/jpeg':
+            $srcImg = @imagecreatefromjpeg($filePath);
+            break;
+        case 'image/png':
+            $srcImg = @imagecreatefrompng($filePath);
+            break;
+        case 'image/webp':
+            $srcImg = function_exists('imagecreatefromwebp') ? @imagecreatefromwebp($filePath) : null;
+            break;
+        case 'image/gif':
+            $srcImg = @imagecreatefromgif($filePath);
+            break;
+    }
+
+    if (!$srcImg) {
+        return true; // Fallback to original file
+    }
+
+    // Calculate optimal dimensions keeping aspect ratio
+    $newWidth = $origWidth;
+    $newHeight = $origHeight;
+
+    if ($origWidth > $maxWidth || $origHeight > $maxHeight) {
+        $ratio = min($maxWidth / $origWidth, $maxHeight / $origHeight);
+        $newWidth = max(1, (int)round($origWidth * $ratio));
+        $newHeight = max(1, (int)round($origHeight * $ratio));
+    }
+
+    $canvas = imagecreatetruecolor($newWidth, $newHeight);
+    if (!$canvas) {
+        imagedestroy($srcImg);
+        return true;
+    }
+
+    // Handle PNG and WEBP transparency
+    if ($detectedMime === 'image/png' || $detectedMime === 'image/webp') {
+        imagealphablending($canvas, false);
+        imagesavealpha($canvas, true);
+        $transparent = imagecolorallocatealpha($canvas, 0, 0, 0, 127);
+        imagefilledrectangle($canvas, 0, 0, $newWidth, $newHeight, $transparent);
+    }
+
+    imagecopyresampled($canvas, $srcImg, 0, 0, 0, 0, $newWidth, $newHeight, $origWidth, $origHeight);
+
+    // Save compressed image file
+    switch ($detectedMime) {
+        case 'image/jpeg':
+            imagejpeg($canvas, $filePath, $quality);
+            break;
+        case 'image/png':
+            imagepng($canvas, $filePath, 7); // Compression level 0-9
+            break;
+        case 'image/webp':
+            if (function_exists('imagewebp')) {
+                imagewebp($canvas, $filePath, $quality);
+            } else {
+                imagejpeg($canvas, $filePath, $quality);
+            }
+            break;
+        case 'image/gif':
+            imagegif($canvas, $filePath);
+            break;
+    }
+
+    imagedestroy($canvas);
+    imagedestroy($srcImg);
+    return true;
+}
 
 /**
  * Validates and handles file uploads with strict min/max size limits and MIME checks.
+ * Automatically resizes & compresses images to reduce file size.
  *
  * @param array|null $file $_FILES array element
  * @param string $folder Target upload folder
  * @param int $minSize Minimum allowed size in bytes (default 5 KB)
- * @param int $maxSize Maximum allowed size in bytes (default 3 MB)
+ * @param int $maxSize Maximum allowed size in bytes (default 5 MB)
  * @return array Array with ['success' => bool, 'path' => string|null, 'error' => string|null]
  */
 function handleUploadDetailed($file, $folder = 'public/uploads', $minSize = UPLOAD_MIN_SIZE_BYTES, $maxSize = UPLOAD_MAX_SIZE_BYTES) {
@@ -86,7 +182,16 @@ function handleUploadDetailed($file, $folder = 'public/uploads', $minSize = UPLO
         mkdir($targetDir, 0755, true);
     }
 
-    if (move_uploaded_file($file['tmp_name'], $targetFile)) {
+    $saved = false;
+    if (is_uploaded_file($file['tmp_name'])) {
+        $saved = move_uploaded_file($file['tmp_name'], $targetFile);
+    } else {
+        $saved = copy($file['tmp_name'], $targetFile);
+    }
+
+    if ($saved) {
+        // Automatically compress and resize image for high performance
+        compressAndResizeImage($targetFile, $mime, 1920, 1080, 82);
         return ['success' => true, 'path' => trim($folder, '/') . '/' . $name, 'error' => null];
     }
 
