@@ -182,6 +182,7 @@ function handleUploadDetailed($file, $folder = 'public/uploads', $minSize = UPLO
             $targetDir = $resolved;
         }
     }
+    $targetFile = rtrim($targetDir, '/\\') . '/' . $name;
     
     $oldUmask = @umask(0);
     if (!is_dir($targetDir)) {
