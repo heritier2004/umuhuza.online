@@ -176,26 +176,55 @@ function handleUploadDetailed($file, $folder = 'public/uploads', $minSize = UPLO
     // Generate clean unique filename
     $name = uniqid('img_') . '_' . preg_replace('/[^a-zA-Z0-9_\.-]/', '_', basename($file['name']));
     $targetDir = __DIR__ . '/../../' . trim($folder, '/');
-    $targetFile = $targetDir . '/' . $name;
+    if (file_exists($targetDir)) {
+        $resolved = realpath($targetDir);
+        if ($resolved) {
+            $targetDir = $resolved;
+        }
+    }
     
+    $oldUmask = @umask(0);
     if (!is_dir($targetDir)) {
-        mkdir($targetDir, 0755, true);
+        @mkdir($targetDir, 0777, true);
+    }
+    @chmod($targetDir, 0777);
+    @umask($oldUmask);
+
+    if (!is_writable($targetDir)) {
+        @chmod($targetDir, 0777);
     }
 
     $saved = false;
     if (is_uploaded_file($file['tmp_name'])) {
-        $saved = move_uploaded_file($file['tmp_name'], $targetFile);
-    } else {
-        $saved = copy($file['tmp_name'], $targetFile);
+        $saved = @move_uploaded_file($file['tmp_name'], $targetFile);
+    }
+    
+    // Fallback 1: copy() if move_uploaded_file failed (e.g., across separate Docker/temp volume mounts)
+    if (!$saved && file_exists($file['tmp_name'])) {
+        $saved = @copy($file['tmp_name'], $targetFile);
+    }
+
+    // Fallback 2: file_get_contents + file_put_contents
+    if (!$saved && file_exists($file['tmp_name'])) {
+        $content = @file_get_contents($file['tmp_name']);
+        if ($content !== false) {
+            $saved = (@file_put_contents($targetFile, $content) !== false);
+        }
     }
 
     if ($saved) {
+        @chmod($targetFile, 0666);
         // Automatically compress and resize image for high performance
         compressAndResizeImage($targetFile, $mime, 1920, 1080, 82);
         return ['success' => true, 'path' => trim($folder, '/') . '/' . $name, 'error' => null];
     }
 
-    return ['success' => false, 'path' => null, 'error' => 'Server failed to save uploaded image.'];
+    error_log("Upload failed: Unable to save to {$targetFile}. Is {$targetDir} writable?");
+    return [
+        'success' => false,
+        'path' => null,
+        'error' => 'Server failed to save uploaded image. Please ensure public/uploads folder permissions are set to writable (chmod 777 public/uploads).'
+    ];
 }
 
 /**

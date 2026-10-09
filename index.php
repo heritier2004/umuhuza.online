@@ -1,4 +1,5 @@
 <?php
+ob_start();
 if (session_status() === PHP_SESSION_NONE) {
     ini_set('session.cookie_httponly', 1);
     ini_set('session.use_only_cookies', 1);
@@ -9,6 +10,18 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 require_once __DIR__ . '/app/config/constants.php';
+
+// Ensure public/uploads exists with write permissions on startup
+$appUploadsDir = __DIR__ . '/public/uploads';
+if (!is_dir($appUploadsDir)) {
+    $prevUmask = @umask(0);
+    @mkdir($appUploadsDir, 0777, true);
+    @chmod($appUploadsDir, 0777);
+    @umask($prevUmask);
+} elseif (!is_writable($appUploadsDir)) {
+    @chmod($appUploadsDir, 0777);
+}
+
 require_once __DIR__ . '/app/config/database.php';
 require_once __DIR__ . '/app/helpers/security.php';
 generateCsrfToken();
