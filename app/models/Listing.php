@@ -19,19 +19,58 @@ class Listing {
     }
 
     public static function all($pdo) {
-        $stmt = $pdo->query('SELECT l.*, c.name AS category_name, p.name AS plan_name, u.full_name AS provider_name, u.phone, u.whatsapp FROM listings l LEFT JOIN categories c ON c.id = l.category_id LEFT JOIN plans p ON p.id = l.plan_id LEFT JOIN users u ON u.id = l.user_id ORDER BY l.created_at DESC');
-        return $stmt->fetchAll();
+        $stmt = $pdo->query('
+            SELECT l.*, c.name AS category_name, p.name AS plan_name, u.full_name AS provider_name, u.phone, u.whatsapp,
+                   (SELECT image_path FROM listing_images WHERE listing_id = l.id ORDER BY id ASC LIMIT 1) AS image_path
+            FROM listings l 
+            LEFT JOIN categories c ON c.id = l.category_id 
+            LEFT JOIN plans p ON p.id = l.plan_id 
+            LEFT JOIN users u ON u.id = l.user_id 
+            ORDER BY l.created_at DESC
+        ');
+        return $stmt ? $stmt->fetchAll() : [];
+    }
+
+    public static function active($pdo) {
+        $stmt = $pdo->query('
+            SELECT l.*, c.name AS category_name, p.name AS plan_name, u.full_name AS provider_name, u.phone, u.whatsapp,
+                   (SELECT image_path FROM listing_images WHERE listing_id = l.id ORDER BY id ASC LIMIT 1) AS image_path
+            FROM listings l 
+            LEFT JOIN categories c ON c.id = l.category_id 
+            LEFT JOIN plans p ON p.id = l.plan_id 
+            LEFT JOIN users u ON u.id = l.user_id 
+            WHERE l.status IN ("active", "approved")
+            ORDER BY l.created_at DESC
+        ');
+        return $stmt ? $stmt->fetchAll() : [];
     }
 
     public static function byUser($pdo, $userId) {
-        $stmt = $pdo->prepare('SELECT l.*, c.name AS category_name, p.name AS plan_name, u.full_name AS provider_name, u.phone, u.whatsapp FROM listings l LEFT JOIN categories c ON c.id = l.category_id LEFT JOIN plans p ON p.id = l.plan_id LEFT JOIN users u ON u.id = l.user_id WHERE l.user_id = ? ORDER BY l.created_at DESC');
-        $stmt->execute([$userId]);
+        $stmt = $pdo->prepare('
+            SELECT l.*, c.name AS category_name, p.name AS plan_name, u.full_name AS provider_name, u.phone, u.whatsapp,
+                   (SELECT image_path FROM listing_images WHERE listing_id = l.id ORDER BY id ASC LIMIT 1) AS image_path
+            FROM listings l 
+            LEFT JOIN categories c ON c.id = l.category_id 
+            LEFT JOIN plans p ON p.id = l.plan_id 
+            LEFT JOIN users u ON u.id = l.user_id 
+            WHERE l.user_id = ? 
+            ORDER BY l.created_at DESC
+        ');
+        $stmt->execute([(int)$userId]);
         return $stmt->fetchAll();
     }
 
     public static function find($pdo, $id) {
-        $stmt = $pdo->prepare('SELECT l.*, c.name AS category_name, p.name AS plan_name, u.full_name AS provider_name, u.phone, u.whatsapp, u.email, u.status AS provider_status FROM listings l LEFT JOIN categories c ON c.id = l.category_id LEFT JOIN plans p ON p.id = l.plan_id LEFT JOIN users u ON u.id = l.user_id WHERE l.id = ?');
-        $stmt->execute([$id]);
+        $stmt = $pdo->prepare('
+            SELECT l.*, c.name AS category_name, p.name AS plan_name, u.full_name AS provider_name, u.phone, u.whatsapp, u.email, u.status AS provider_status,
+                   (SELECT image_path FROM listing_images WHERE listing_id = l.id ORDER BY id ASC LIMIT 1) AS image_path
+            FROM listings l 
+            LEFT JOIN categories c ON c.id = l.category_id 
+            LEFT JOIN plans p ON p.id = l.plan_id 
+            LEFT JOIN users u ON u.id = l.user_id 
+            WHERE l.id = ?
+        ');
+        $stmt->execute([(int)$id]);
         return $stmt->fetch();
     }
 

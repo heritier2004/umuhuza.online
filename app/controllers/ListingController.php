@@ -73,6 +73,12 @@ class ListingController {
                 }
                 // Commit transaction
                 $pdo->commit();
+
+                // Notify admin of new upload/listing needing review
+                $listingTitle = sanitize($_POST['title'] ?? 'New listing');
+                $providerName = $user['full_name'] ?? 'Provider';
+                NotificationModel::notifyAdmins($pdo, "New listing uploaded for approval: '{$listingTitle}' by {$providerName} ({$district})", null, '?route=admin-dashboard');
+
                 flash('success', 'Listing submitted for approval.');
                 header('Location: ?route=provider-dashboard');
                 exit;

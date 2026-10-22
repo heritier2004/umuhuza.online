@@ -42,9 +42,7 @@ $activePlanId = (int)($plan['id'] ?? 1);
     </a>
     <div class="ad-topnav-icon-btn" data-ad-view="notifications">
       <svg class="ad-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-      <?php if (count($unreadNotifs) > 0): ?>
-        <span class="ad-notif-badge"><?= count($unreadNotifs) ?></span>
-      <?php endif; ?>
+      <span class="ad-notif-badge" style="<?= count($unreadNotifs) > 0 ? '' : 'display:none;' ?>"><?= count($unreadNotifs) ?></span>
     </div>
     <div class="ad-user-chip" data-ad-view="settings">
       <div class="ad-user-avatar"><?= strtoupper(substr(($user['full_name'] ?? 'PR'), 0, 2)) ?></div>
@@ -114,9 +112,7 @@ $activePlanId = (int)($plan['id'] ?? 1);
       <a class="ad-nav-item" data-ad-view="notifications">
         <svg class="ad-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
         <span class="ad-nav-label">Notifications</span>
-        <?php if (count($unreadNotifs) > 0): ?>
-          <span class="ad-nav-badge"><?= count($unreadNotifs) ?></span>
-        <?php endif; ?>
+        <span class="ad-nav-badge ad-notif-badge" style="<?= count($unreadNotifs) > 0 ? '' : 'display:none;' ?>"><?= count($unreadNotifs) ?></span>
       </a>
       
       <a class="ad-nav-item" data-ad-view="settings">
@@ -456,12 +452,27 @@ function closePlanModal() {
              <h3 class="ad-panel-title"><svg class="ad-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg> Create a new listing</h3>
           </div>
           <div class="ad-panel-body">
-            <form class="ad-form-row" style="display:flex; flex-wrap:wrap; gap:16px;" method="POST" action="?route=create-listing" enctype="multipart/form-data">
+            <form class="ad-form-row" style="display:flex; flex-wrap:wrap; gap:16px;" method="POST" action="?route=create-listing" enctype="multipart/form-data" onsubmit="var b=this.querySelector('button[type=submit]'); if(b){ b.disabled=true; b.textContent='Uploading & Publishing...'; } return true;">
               <input type="hidden" name="csrf_token" value="<?php echo e(generateCsrfToken()); ?>">
               
               <div class="ad-form-group" style="width:100%;">
                 <label>Listing title</label>
                 <input class="ad-form-control" name="title" placeholder="Enter a clear listing title" required />
+              </div>
+              <div class="ad-form-group" style="flex:1; min-width: 250px;">
+                <label>Service Category</label>
+                <select class="ad-form-control" name="category_id" required>
+                  <?php if (!empty($categories)): ?>
+                    <?php foreach ($categories as $cat): ?>
+                      <option value="<?= (int)$cat['id'] ?>"><?= e($cat['name']) ?></option>
+                    <?php endforeach; ?>
+                  <?php else: ?>
+                    <option value="1">Real Estate</option>
+                    <option value="2">Technical Service</option>
+                    <option value="4">Plumbing</option>
+                    <option value="5">Electrical</option>
+                  <?php endif; ?>
+                </select>
               </div>
               <div class="ad-form-group" style="flex:1; min-width: 250px;">
                 <label>Price</label>

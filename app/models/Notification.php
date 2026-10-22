@@ -58,7 +58,7 @@ class NotificationModel {
                    r.created_at AS request_created_at
             FROM notifications n
             LEFT JOIN requests r ON r.id = n.request_id
-            WHERE n.user_id = ? 
+            WHERE n.user_id = ? AND (n.is_archived = 0 OR n.is_archived IS NULL)
             ORDER BY n.created_at DESC
         ');
         $stmt->execute([$userId]);
@@ -66,7 +66,7 @@ class NotificationModel {
     }
 
     public static function unreadCount($pdo, $userId) {
-        $stmt = $pdo->prepare('SELECT COUNT(*) AS total FROM notifications WHERE user_id = ? AND is_read = 0');
+        $stmt = $pdo->prepare('SELECT COUNT(*) AS total FROM notifications WHERE user_id = ? AND is_read = 0 AND (is_archived = 0 OR is_archived IS NULL)');
         $stmt->execute([$userId]);
         return (int) ($stmt->fetch()['total'] ?? 0);
     }
@@ -74,6 +74,34 @@ class NotificationModel {
     public static function markAllRead($pdo, $userId) {
         $stmt = $pdo->prepare('UPDATE notifications SET is_read = 1 WHERE user_id = ?');
         return $stmt->execute([$userId]);
+    }
+
+    public static function markRead($pdo, $id, $userId = null) {
+        if ($userId !== null) {
+            $stmt = $pdo->prepare('UPDATE notifications SET is_read = 1 WHERE id = ? AND user_id = ?');
+            return $stmt->execute([$id, $userId]);
+        }
+        $stmt = $pdo->prepare('UPDATE notifications SET is_read = 1 WHERE id = ?');
+        return $stmt->execute([$id]);
+    }
+
+    public static function notifyAdmins($pdo, $message, $requestId = null, $url = '/?route=admin-dashboard') {
+        if (!$pdo) return false;
+        try {
+            $stmt = $pdo->query('SELECT id FROM users WHERE role = "admin" OR account_type = "admin"');
+            $admins = $stmt ? $stmt->fetchAll() : [];
+            if (empty($admins)) {
+                self::create($pdo, 1, $message, $requestId, $url);
+                return true;
+            }
+            foreach ($admins as $admin) {
+                self::create($pdo, (int)$admin['id'], $message, $requestId, $url);
+            }
+            return true;
+        } catch (\Exception $e) {
+            error_log("Failed to notify admins: " . $e->getMessage());
+            return false;
+        }
     }
 }
 

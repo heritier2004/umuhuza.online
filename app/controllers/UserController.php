@@ -37,8 +37,10 @@ class UserController {
             $bStmt->execute([(int) $user['id']]);
             $blockedLeadsCount = (int)($bStmt->fetch()['total'] ?? 0);
         }
+
+        $categories = $pdo ? $pdo->query('SELECT * FROM categories ORDER BY name ASC')->fetchAll() : [];
         
-        return compact('user', 'listings', 'plan', 'matchedRequests', 'notifications', 'blockedLeadsCount', 'remainingQuota');
+        return compact('user', 'listings', 'plan', 'matchedRequests', 'notifications', 'blockedLeadsCount', 'remainingQuota', 'categories');
     }
 
     public function updateProfile($pdo) {

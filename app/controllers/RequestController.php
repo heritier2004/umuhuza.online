@@ -196,6 +196,10 @@ class RequestController {
                 }
             }
 
+            $clientName = sanitize($_POST['name'] ?? 'A client');
+            $locLabel = trim(($district ?: $province) . ' / ' . ($sector ?: ''));
+            NotificationModel::notifyAdmins($pdo, "New client request submitted in {$locLabel}: " . sanitize($reqType) . " by {$clientName}", $requestId, '?route=admin-dashboard#ops-requests');
+
             flash('success', $matched > 0 ? 'Request submitted. Matches were notified.' : 'Request submitted. Providers will be matched shortly.');
             header('Location: ?route=home');
             exit;

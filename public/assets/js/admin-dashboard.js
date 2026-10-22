@@ -460,21 +460,112 @@
   }
 
   /* ----------------------------------------------------------
-     NOTIFICATIONS mark-as-read
+     NOTIFICATIONS mark-as-read & REAL-TIME POLLING
   ---------------------------------------------------------- */
-  document.querySelectorAll('.ad-notif-item').forEach(function (item) {
-    item.addEventListener('click', function () {
-      item.classList.remove('unread');
-      updateNotifBadge();
+  function updateNotifBadges(unreadCount) {
+    if (unreadCount === undefined) {
+      unreadCount = document.querySelectorAll('.ad-notif-item.unread').length;
+    }
+    var badges = document.querySelectorAll('.ad-notif-badge');
+    badges.forEach(function (badge) {
+      badge.textContent = unreadCount;
+      badge.style.display = unreadCount > 0 ? '' : 'none';
     });
-  });
+    var kpiUnread = document.getElementById('adKpiUnreadNotifs');
+    if (kpiUnread) {
+      kpiUnread.textContent = unreadCount;
+    }
+  }
 
-  function updateNotifBadge() {
-    var badge = document.querySelector('.ad-notif-badge');
-    if (!badge) return;
-    var unread = document.querySelectorAll('.ad-notif-item.unread').length;
-    badge.textContent = unread;
-    badge.style.display = unread > 0 ? 'flex' : 'none';
+  function bindNotifItems() {
+    document.querySelectorAll('.ad-notif-item').forEach(function (item) {
+      if (item.dataset.bound) return;
+      item.dataset.bound = 'true';
+      item.addEventListener('click', function () {
+        var notifId = item.getAttribute('data-notif-id');
+        if (item.classList.contains('unread')) {
+          item.classList.remove('unread');
+          updateNotifBadges();
+          if (notifId) {
+            fetch('?route=api-mark-read&id=' + encodeURIComponent(notifId))
+              .catch(function (err) { console.error('Error marking read:', err); });
+          }
+        }
+      });
+    });
+  }
+
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function renderNotifList(container, notifs) {
+    if (!notifs || notifs.length === 0) {
+      container.innerHTML = '<div class="ad-empty-state" style="padding:2rem;text-align:center;color:var(--ad-text-muted);">' +
+        '<svg class="ad-svg-icon" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;margin-bottom:1rem;"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"></path></svg>' +
+        '<p>No new notifications</p></div>';
+      return;
+    }
+    var html = '';
+    notifs.forEach(function (n) {
+      var isUnread = !n.is_read || n.is_read === '0' || n.is_read === 0;
+      var isSec = (n.message || '').indexOf('SECURITY ALERT') !== -1;
+      var dateStr = n.created_at ? new Date(n.created_at).toLocaleString() : '';
+      html += '<div class="ad-notif-item ' + (isUnread ? 'unread' : '') + '" data-notif-id="' + (n.id || '') + '">' +
+        '<div class="ad-notif-icon" style="background:var(--ad-info-bg);color:var(--ad-info);">' +
+        '<svg class="ad-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+        (isSec ? '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line>'
+               : '<path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="17" y1="11" x2="23" y2="11"></line>') +
+        '</svg></div>' +
+        '<div class="ad-notif-body">' +
+        (isSec ? '<strong style="color:var(--ad-danger);">Security Alert</strong>' : '<strong>System Notification</strong>') +
+        '<p>' + escapeHtml(n.message || '') + '</p>' +
+        '</div>' +
+        '<div class="ad-notif-time">' + escapeHtml(dateStr) + '</div>' +
+        '</div>';
+    });
+    container.innerHTML = html;
+    bindNotifItems();
+  }
+
+  function pollNotifications() {
+    fetch('?route=api-notifications')
+      .then(function (res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      })
+      .then(function (data) {
+        if (data && typeof data.unread === 'number') {
+          updateNotifBadges(data.unread);
+          var notifContainer = document.querySelector('.ad-notif-list');
+          if (notifContainer && Array.isArray(data.notifications)) {
+            renderNotifList(notifContainer, data.notifications);
+          }
+        }
+      })
+      .catch(function () {});
+  }
+
+  function initNotifActions() {
+    bindNotifItems();
+    var markAllBtn = document.getElementById('adBtnMarkAllRead');
+    if (markAllBtn) {
+      markAllBtn.addEventListener('click', function () {
+        fetch('?route=api-mark-notifications-read', { method: 'POST' })
+          .then(function (res) { return res.json(); })
+          .then(function () {
+            document.querySelectorAll('.ad-notif-item.unread').forEach(function (el) {
+              el.classList.remove('unread');
+            });
+            updateNotifBadges(0);
+          })
+          .catch(function (err) {
+            console.error('Error marking all read:', err);
+          });
+      });
+    }
   }
 
   /* ----------------------------------------------------------
@@ -503,6 +594,9 @@
     animateHealthRing();
     animateProgressBars();
     initCharts();
+    initNotifActions();
+    // Poll notifications every 20 seconds for real-time updates
+    setInterval(pollNotifications, 20000);
   }
 
   if (document.readyState === 'loading') {

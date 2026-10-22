@@ -5,9 +5,9 @@ if (session_status() === PHP_SESSION_NONE) {
     ini_set('session.use_only_cookies', 1);
     ini_set('session.gc_maxlifetime', 86400); // 24-hour session lifetime
     session_start();
-    // Load translation helper early
-    require_once __DIR__ . '/app/helpers/i18n.php';
 }
+// Load translation helper early
+require_once __DIR__ . '/app/helpers/i18n.php';
 
 require_once __DIR__ . '/app/config/constants.php';
 
@@ -204,6 +204,19 @@ if ($route === 'api-mark-read') {
     exit;
 }
 
+if ($route === 'api-archive') {
+    header('Content-Type: application/json');
+    if (isLoggedIn() && $pdo) {
+        $id = (int)($_GET['id'] ?? 0);
+        $stmt = $pdo->prepare('UPDATE notifications SET is_archived = 1 WHERE id = ? AND user_id = ?');
+        $stmt->execute([$id, (int)$_SESSION['user_id']]);
+        echo json_encode(['success' => true]);
+    } else {
+        echo json_encode(['success' => false]);
+    }
+    exit;
+}
+
 if ($route === 'push-subscribe') {
     header('Content-Type: application/json');
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isLoggedIn() && $pdo) {
@@ -238,18 +251,11 @@ if ($route === 'api-archive') {
     exit;
 }
 
-$allListings = $pdo ? Listing::all($pdo) : [];
+$allListings = $pdo ? Listing::active($pdo) : [];
 if ($pdo) {
     expireExpiredSubscriptions($pdo);
 }
 $ranked = rankListings($allListings);
-if (empty($ranked)) {
-    $ranked = [
-        ['id' => 1, 'title' => 'Luxury 3-bedroom house in Kigali', 'description' => 'Modern family home with premium finishes, secure compound, and fast access to Kigali city center.', 'price' => 95000000, 'province' => 'Kigali', 'district' => 'Gasabo', 'rating' => 4.9, 'plan_id' => 3, 'plan_name' => 'Super', 'category_name' => 'Real Estate', 'featured' => 1, 'provider_name' => 'Kigali Realty Hub', 'image_url' => 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=900&q=80'],
-        ['id' => 2, 'title' => 'Fast TV repair and panel fixes', 'description' => 'Verified electronics repair team for TVs, panels, and small home appliances.', 'price' => 35000, 'province' => 'Kigali', 'district' => 'Nyarugenge', 'rating' => 4.8, 'plan_id' => 2, 'plan_name' => 'Premium', 'category_name' => 'Technical Service', 'featured' => 1, 'provider_name' => 'Urban Tech Rwanda', 'image_url' => 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80'],
-        ['id' => 3, 'title' => 'Trusted plumbing and leak repair', 'description' => 'Reliable plumbing support for leaks, pipe fitting, and urgent household maintenance.', 'price' => 45000, 'province' => 'Rwanda', 'district' => 'Muhanga', 'rating' => 4.7, 'plan_id' => 2, 'plan_name' => 'Premium', 'category_name' => 'Plumbing', 'featured' => 1, 'provider_name' => 'HomeFix Rwanda', 'image_url' => 'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=900&q=80'],
-    ];
-}
 $listings = $ranked;
 $requests = $pdo ? RequestModel::all($pdo) : [];
 $featuredListings = array_filter($ranked, function ($item) {
@@ -285,8 +291,8 @@ if ($pdo) {
             'id' => $provider['id'],
             'full_name' => $provider['full_name'],
             'username' => $provider['username'],
-            'phone' => $provider['phone'],
-            'whatsapp' => $provider['whatsapp'],
+            'phone' => $provider['phone'] ?? '',
+            'whatsapp' => $provider['whatsapp'] ?? ($provider['phone'] ?? ''),
             'rating' => $avgRating,
             'service_category' => !empty($provider['service_category']) ? $provider['service_category'] : ($providerListings[0]['category_name'] ?? 'General Service'),
             'distance' => sprintf('%.1f km', 1.0 + (count($topProviders) * 0.3)),
@@ -297,15 +303,7 @@ if ($pdo) {
         ];
     }
 }
-if (empty($topProviders)) {
-    $topProviders = [
-        ['full_name' => 'Kigali Home Fix', 'username' => 'homefix', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'rating' => 4.9, 'service_category' => 'Plumbing & Repairs', 'distance' => '1.2 km', 'provider_kind' => 'service', 'province' => 'Kigali', 'district' => 'Gasabo'],
-        ['full_name' => 'Urban Tech Rwanda', 'username' => 'urbantech', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'rating' => 4.8, 'service_category' => 'TV & Electronics', 'distance' => '2.1 km', 'provider_kind' => 'service', 'province' => 'Kigali', 'district' => 'Nyarugenge'],
-        ['full_name' => 'Smart Realty Hub', 'username' => 'smartrealty', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'rating' => 4.7, 'service_category' => 'Real Estate', 'distance' => '3.0 km', 'provider_kind' => 'agent', 'province' => 'Kigali', 'district' => 'Kicukiro'],
-    ];
-    $zoneAgentCount = 1;
-    $zoneServiceCount = 2;
-}
+
 $heroSlides = [];
 if (!empty($featuredListings)) {
     foreach (array_slice($featuredListings, 0, 5) as $item) {
@@ -315,18 +313,11 @@ if (!empty($featuredListings)) {
             'rating' => (float)($item['rating'] ?? 4.5),
             'badge' => $item['plan_name'] ?? 'Featured',
             'category' => $item['category_name'] ?? 'Marketplace',
-            'phone' => $item['phone'] ?? '+250788367073',
-            'whatsapp' => $item['whatsapp'] ?? '+250788367073',
+            'phone' => $item['phone'] ?? '',
+            'whatsapp' => $item['whatsapp'] ?? ($item['phone'] ?? ''),
             'image' => listingCoverUrl($item),
         ];
     }
-}
-if (empty($heroSlides)) {
-    $heroSlides = [
-        ['title' => 'Featured house in Kigali', 'location' => 'Kigali / Gasabo', 'rating' => 4.9, 'badge' => 'Premium', 'category' => 'Real Estate', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'image' => 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=900&q=80'],
-        ['title' => 'TV repair specialists', 'location' => 'Kigali / Nyarugenge', 'rating' => 4.8, 'badge' => 'Trending', 'category' => 'Technical Service', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'image' => 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80'],
-        ['title' => 'Plumbing and maintenance', 'location' => 'Rwanda / Nationwide', 'rating' => 4.7, 'badge' => 'Popular', 'category' => 'Services', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'image' => 'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=900&q=80'],
-    ];
 }
 switch ($route) {
     case 'listings':

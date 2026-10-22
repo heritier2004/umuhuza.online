@@ -1,8 +1,16 @@
 <?php include __DIR__ . '/../layouts/header.php'; ?>
 <?php
-$heroSlides = $heroSlides ?? [
-  ['title' => 'Shakisha Inzu n\'Abatanga Serivisi Bizewe Mu Rwanda', 'location' => 'Kigali / Gasabo', 'rating' => 4.9, 'badge' => 'Premium', 'category' => 'Real Estate', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'image' => 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=900&q=80'],
-  ['title' => 'Tangira Abatanga Serivisi Mwiza', 'location' => 'Kigali / Nyarugenge', 'rating' => 4.8, 'badge' => 'Trending', 'category' => 'Technical Service', 'phone' => '+250788367073', 'whatsapp' => '+250788367073', 'image' => 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80'],
+$heroSlides = !empty($heroSlides) ? $heroSlides : [
+  [
+    'title' => 'Rwanda’s Verified Marketplace & Services Hub',
+    'location' => 'Kigali & All Provinces',
+    'rating' => 5.0,
+    'badge' => 'UMUHUZA',
+    'category' => 'Official Marketplace',
+    'phone' => '',
+    'whatsapp' => '',
+    'image' => 'public/assets/logo_wide.png'
+  ]
 ];
 $nearbyListings = $nearbyListings ?? [];
 $featuredListings = $featuredListings ?? [];
@@ -38,8 +46,13 @@ $requests = $requests ?? [];
           <h1><?= e($slide['title'] ?? 'Marketplace listing') ?></h1>
           <p><?= e($slide['location'] ?? 'Rwanda') ?> • <?= e($slide['rating'] ?? '4.5') ?> ★</p>
           <div class="hero-actions">
-            <a class="btn btn-light btn-sm" href="tel:<?= e($slide['phone'] ?? '+250788367073') ?>" data-i18n="call">Call</a>
-            <a class="btn btn-success btn-sm" href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $slide['whatsapp'] ?? '+250788367073') ?>" data-i18n="whatsapp">WhatsApp</a>
+            <?php if (!empty($slide['phone'])): ?>
+              <a class="btn btn-light btn-sm" href="tel:<?= e($slide['phone']) ?>" data-i18n="call">Call</a>
+            <?php endif; ?>
+            <?php if (!empty($slide['whatsapp']) || !empty($slide['phone'])): ?>
+              <a class="btn btn-success btn-sm" href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $slide['whatsapp'] ?: $slide['phone']) ?>" data-i18n="whatsapp">WhatsApp</a>
+            <?php endif; ?>
+            <a class="btn btn-outline-light btn-sm" href="?route=listings">Browse All</a>
           </div>
           <div class="hero-trust-indicators">
             <a href="?route=listings&category=Real+Estate" class="hero-trust-item">
@@ -147,8 +160,13 @@ $requests = $requests ?? [];
           </div>
           <div class="small text-dark fw-semibold mb-3">Provider: <?= e($item['provider_name'] ?? 'Verified provider') ?></div>
           <div class="listing-actions compact-actions">
-            <a class="btn btn-call btn-sm" href="tel:<?= e($item['phone'] ?? '+250788367073') ?>">Call</a>
-            <a class="btn btn-whatsapp btn-sm" href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $item['whatsapp'] ?? '+250788367073') ?>">WhatsApp</a>
+            <?php if (!empty($item['phone'])): ?>
+              <a class="btn btn-call btn-sm" href="tel:<?= e($item['phone']) ?>">Call</a>
+            <?php endif; ?>
+            <?php if (!empty($item['whatsapp']) || !empty($item['phone'])): ?>
+              <a class="btn btn-whatsapp btn-sm" href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $item['whatsapp'] ?: $item['phone']) ?>">WhatsApp</a>
+            <?php endif; ?>
+            <a class="btn btn-outline-primary btn-sm" href="?route=listing&id=<?= (int)$item['id'] ?>">Details</a>
           </div>
         </div>
       </article>

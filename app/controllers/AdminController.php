@@ -84,13 +84,18 @@ class AdminController {
         ];
 
         $verifications = $pdo ? $pdo->query('SELECT vr.*, u.full_name, u.role, u.email FROM verification_requests vr JOIN users u ON u.id = vr.user_id ORDER BY vr.created_at DESC')->fetchAll() : [];
-        if (empty($verifications)) {
-            $verifications = [
-                ['id' => 1, 'user_id' => 2, 'status' => 'pending', 'note' => 'Identity verification request', 'created_at' => '2026-06-09 12:00:00', 'full_name' => 'Marie Uwimana', 'role' => 'provider', 'email' => 'marie@example.com']
-            ];
+
+        require_once __DIR__ . '/../models/AdminLog.php';
+        $auditLogs = AdminLog::getAllLogs($pdo, null, 25);
+
+        $failedLogins = 0;
+        if ($pdo) {
+            try {
+                $failedLogins = (int)$pdo->query("SELECT COALESCE(SUM(failed_count), 0) FROM login_attempts")->fetchColumn();
+            } catch (\Exception $e) {}
         }
 
-        return compact('listings', 'requests', 'users', 'payments', 'analytics', 'adminAnalytics', 'verifications', 'notifications');
+        return compact('listings', 'requests', 'users', 'payments', 'analytics', 'adminAnalytics', 'verifications', 'notifications', 'auditLogs', 'failedLogins');
     }
 
     public function approvePayment($pdo, $paymentId) {

@@ -56,6 +56,7 @@ class PaymentController {
             ]);
 
             NotificationModel::create($pdo, (int) $_SESSION['user_id'], 'Manual payment request submitted for plan upgrade.');
+            NotificationModel::notifyAdmins($pdo, "New payment submitted: RWF " . number_format($amount) . " from {$senderName} ({$senderPhone}), Ref: {$transactionId}", null, '?route=admin-dashboard#fin-payments');
             flash('success', 'Payment request submitted for review.');
             header('Location: ?route=provider-dashboard');
             exit;

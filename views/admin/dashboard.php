@@ -1,4 +1,10 @@
-<?php include __DIR__ . '/../layouts/header.php'; ?>
+<?php 
+include __DIR__ . '/../layouts/header.php'; 
+$notifList = $notifications ?? ($data['notifications'] ?? []);
+$unreadNotifCount = count(array_filter($notifList, fn($n) => empty($n['is_read'])));
+$readNotifCount = count(array_filter($notifList, fn($n) => !empty($n['is_read'])));
+$totalNotifCount = count($notifList);
+?>
 <script>document.body.classList.add('admin-exec-page');</script>
 <link rel="stylesheet" href="public/assets/css/admin-dashboard.css?v=<?= urlencode(md5_file(__DIR__ . '/../../public/assets/css/admin-dashboard.css')) ?>" />
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -33,7 +39,7 @@
 
     <button class="ad-topnav-icon-btn" type="button" aria-label="Notifications" data-ad-view="notifications" onclick="document.querySelector('[data-ad-view=notifications]').click()">
       <svg class="ad-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-      <span class="ad-notif-badge">5</span>
+      <span class="ad-notif-badge" style="<?= $unreadNotifCount > 0 ? '' : 'display:none;' ?>"><?= $unreadNotifCount ?></span>
     </button>
 
     <a href="?route=home" class="ad-topnav-icon-btn" aria-label="View public site" title="View public site">
@@ -109,7 +115,7 @@
         <button type="button" class="ad-nav-item" data-ad-view="notifications" id="nav-notifications">
           <svg class="ad-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
           <span class="ad-nav-label">Notifications</span>
-          <span class="ad-nav-badge ad-notif-badge">5</span>
+          <span class="ad-nav-badge ad-notif-badge" style="<?= $unreadNotifCount > 0 ? '' : 'display:none;' ?>"><?= $unreadNotifCount ?></span>
         </button>
 
         <button type="button" class="ad-nav-item" data-ad-view="settings" id="nav-settings">
@@ -1052,37 +1058,37 @@
                     <div class="ad-sys-item-icon" style="background:var(--ad-success-bg);color:var(--ad-success);"><svg class="ad-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg></div>
                     <div class="ad-sys-item-body">
                       <label>Web Server</label>
-                      <strong>Apache / PHP</strong>
-                      <div class="ad-metric-bar-wrap"><div class="ad-metric-bar"><div class="ad-metric-bar-fill success" data-width="45%"></div></div></div>
+                      <strong>PHP <?= phpversion() ?></strong>
+                      <small><?= e($_SERVER['SERVER_SOFTWARE'] ?? 'Web Server') ?></small>
                     </div>
-                    <div class="ad-sys-metric"><div class="value ad-text-success">45%</div><small>CPU</small></div>
+                    <div class="ad-sys-metric"><span class="ad-badge ad-badge-success">Online</span></div>
                   </div>
                   <div class="ad-sys-item">
                     <div class="ad-sys-item-icon" style="background:var(--ad-success-bg);color:var(--ad-success);"><svg class="ad-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"></path></svg></div>
                     <div class="ad-sys-item-body">
                       <label>Database</label>
-                      <strong>MySQL / MariaDB</strong>
-                      <div class="ad-metric-bar-wrap"><div class="ad-metric-bar"><div class="ad-metric-bar-fill success" data-width="38%"></div></div></div>
+                      <strong><?= $pdo ? 'MySQL ' . e($pdo->getAttribute(PDO::ATTR_SERVER_VERSION)) : 'Unavailable' ?></strong>
+                      <small><?= $pdo ? 'Connected (utf8mb4)' : 'Connection failed' ?></small>
                     </div>
-                    <div class="ad-sys-metric"><div class="value ad-text-success">38%</div><small>Load</small></div>
+                    <div class="ad-sys-metric"><span class="ad-badge <?= $pdo ? 'ad-badge-success' : 'ad-badge-danger' ?>"><?= $pdo ? 'Healthy' : 'Down' ?></span></div>
                   </div>
                   <div class="ad-sys-item">
                     <div class="ad-sys-item-icon" style="background:var(--ad-warning-bg);color:var(--ad-warning);"><svg class="ad-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect><line x1="2" y1="12" x2="22" y2="12"></line><line x1="6" y1="17" x2="6.01" y2="17"></line></svg></div>
                     <div class="ad-sys-item-body">
-                      <label>Storage Volume</label>
-                      <strong>68% of 50 GB</strong>
-                      <div class="ad-metric-bar-wrap"><div class="ad-metric-bar"><div class="ad-metric-bar-fill warn" data-width="68%"></div></div></div>
+                      <label>Disk Free Space</label>
+                      <strong><?= @disk_free_space(__DIR__) ? round(@disk_free_space(__DIR__) / (1024*1024*1024), 1) . ' GB Available' : 'Storage Available' ?></strong>
+                      <small>Uploads & Database storage</small>
                     </div>
-                    <div class="ad-sys-metric"><div class="value ad-text-warning">68%</div><small>Used</small></div>
+                    <div class="ad-sys-metric"><span class="ad-badge ad-badge-success">Ready</span></div>
                   </div>
                   <div class="ad-sys-item">
                     <div class="ad-sys-item-icon" style="background:var(--ad-success-bg);color:var(--ad-success);"><svg class="ad-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6" y2="18"></line><line x1="10" y1="6" x2="10" y2="18"></line><line x1="14" y1="6" x2="14" y2="18"></line><line x1="18" y1="6" x2="18" y2="18"></line></svg></div>
                     <div class="ad-sys-item-body">
-                      <label>Memory (RAM)</label>
-                      <strong>4.2 GB / 8 GB</strong>
-                      <div class="ad-metric-bar-wrap"><div class="ad-metric-bar"><div class="ad-metric-bar-fill success" data-width="52%"></div></div></div>
+                      <label>Memory (RAM) Allocated</label>
+                      <strong><?= round(memory_get_usage(true) / (1024*1024), 1) ?> MB</strong>
+                      <small>Limit: <?= ini_get('memory_limit') ?></small>
                     </div>
-                    <div class="ad-sys-metric"><div class="value ad-text-success">52%</div><small>Used</small></div>
+                    <div class="ad-sys-metric"><span class="ad-badge ad-badge-success">Optimal</span></div>
                   </div>
                   <div class="ad-sys-item">
                     <div class="ad-sys-item-icon" style="background:var(--ad-info-bg);color:var(--ad-info);"><svg class="ad-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></div>
@@ -1163,13 +1169,13 @@
                 <div class="ad-list">
                   <div class="ad-list-item">
                     <div class="ad-list-icon" style="background:var(--ad-success-bg);color:var(--ad-success);"><svg class="ad-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg></div>
-                    <div class="ad-list-body"><strong>Login Activities</strong><small>Last 24 hours</small></div>
-                    <strong>47 sessions</strong>
+                    <div class="ad-list-body"><strong>Registered Accounts</strong><small>Total in database</small></div>
+                    <strong><?= count($users ?? []) ?> users</strong>
                   </div>
                   <div class="ad-list-item">
                     <div class="ad-list-icon" style="background:var(--ad-warning-bg);color:var(--ad-warning);"><svg class="ad-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg></div>
-                    <div class="ad-list-body"><strong>Failed Logins</strong><small>Last 24 hours</small></div>
-                    <span class="ad-badge ad-badge-warning">3 attempts</span>
+                    <div class="ad-list-body"><strong>Failed Logins</strong><small>Recorded attempts</small></div>
+                    <span class="ad-badge <?= ($failedLogins ?? 0) > 0 ? 'ad-badge-warning' : 'ad-badge-success' ?>"><?= (int)($failedLogins ?? 0) ?> attempts</span>
                   </div>
                   <div class="ad-list-item">
                     <div class="ad-list-icon" style="background:var(--ad-success-bg);color:var(--ad-success);"><svg class="ad-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></div>
@@ -1198,9 +1204,12 @@
                   <table class="ad-table">
                     <thead><tr><th>User</th><th>IP Address</th><th>Location</th><th>Device</th></tr></thead>
                     <tbody>
-                      <tr><td>Admin</td><td>197.243.32.11</td><td>Kigali, Gasabo</td><td>Chrome/Win11</td></tr>
-                      <tr><td>ProviderMarie</td><td>197.243.12.87</td><td>Kigali, Kicukiro</td><td>Safari/iOS17</td></tr>
-                      <tr><td>ClientJohn</td><td>41.216.96.4</td><td>Musanze, Northern</td><td>Firefox/Linux</td></tr>
+                      <tr>
+                        <td><strong><?= e($_SESSION['full_name'] ?? 'Administrator') ?></strong> <span class="ad-badge ad-badge-success" style="font-size:0.65rem;">Active</span></td>
+                        <td><?= e($_SERVER['REMOTE_ADDR'] ?? '127.0.0.1') ?></td>
+                        <td><?= e($_SESSION['province'] ?? 'Rwanda') ?></td>
+                        <td><?= e(substr($_SERVER['HTTP_USER_AGENT'] ?? 'Web Browser', 0, 30)) ?></td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -1223,42 +1232,20 @@
                     <tr><th>Time</th><th>Action</th><th>Actor</th><th>Type</th></tr>
                   </thead>
                   <tbody>
-                    <tr class="ad-log-row">
-                      <td data-label="Time">21:12:04</td>
-                      <td data-label="Action">Payment approved</td>
-                      <td data-label="Actor">Admin</td>
-                      <td data-label="Type"><span class="ad-audit-badge">Finance</span></td>
-                    </tr>
-                    <tr class="ad-log-row">
-                      <td data-label="Time">20:58:31</td>
-                      <td data-label="Action">User account created</td>
-                      <td data-label="Actor">System</td>
-                      <td data-label="Type"><span class="ad-audit-badge">Users</span></td>
-                    </tr>
-                    <tr class="ad-log-row">
-                      <td data-label="Time">20:44:17</td>
-                      <td data-label="Action">Listing published</td>
-                      <td data-label="Actor">Provider</td>
-                      <td data-label="Type"><span class="ad-audit-badge">Marketplace</span></td>
-                    </tr>
-                    <tr class="ad-log-row">
-                      <td data-label="Time">20:30:02</td>
-                      <td data-label="Action">Login attempt failed</td>
-                      <td data-label="Actor">Unknown IP</td>
-                      <td data-label="Type"><span class="ad-audit-badge" style="background:var(--ad-danger-bg);color:var(--ad-danger);border-color:rgba(220,38,38,0.15);">Security</span></td>
-                    </tr>
-                    <tr class="ad-log-row">
-                      <td data-label="Time">20:15:44</td>
-                      <td data-label="Action">Backup completed</td>
-                      <td data-label="Actor">Cron</td>
-                      <td data-label="Type"><span class="ad-audit-badge">System</span></td>
-                    </tr>
-                    <tr class="ad-log-row">
-                      <td data-label="Time">19:44:02</td>
-                      <td data-label="Action">User profile verified</td>
-                      <td data-label="Actor">Admin</td>
-                      <td data-label="Type"><span class="ad-audit-badge">Users</span></td>
-                    </tr>
+                    <?php if (empty($auditLogs)): ?>
+                      <tr class="ad-log-row">
+                        <td colspan="4" style="text-align:center;color:var(--ad-text-muted);padding:1.5rem;">No audit logs recorded yet. System administrative activity will appear here as actions occur.</td>
+                      </tr>
+                    <?php else: ?>
+                      <?php foreach ($auditLogs as $log): ?>
+                        <tr class="ad-log-row">
+                          <td data-label="Time"><?= date('H:i:s (M j)', strtotime($log['created_at'])) ?></td>
+                          <td data-label="Action"><?= e($log['action']) ?></td>
+                          <td data-label="Actor"><?= e($log['full_name'] ?? 'Admin') ?></td>
+                          <td data-label="Type"><span class="ad-audit-badge"><?= e($log['entity_type'] ?? 'General') ?></span></td>
+                        </tr>
+                      <?php endforeach; ?>
+                    <?php endif; ?>
                   </tbody>
                 </table>
               </div>
@@ -1277,17 +1264,17 @@
           <article class="ad-kpi-card ad-kpi-orange">
             <div class="ad-kpi-icon"><svg class="ad-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></div>
             <div class="ad-kpi-label">Unread Notifications</div>
-            <div class="ad-kpi-value">5</div>
+            <div class="ad-kpi-value" id="adKpiUnreadNotifs"><?= $unreadNotifCount ?></div>
           </article>
           <article class="ad-kpi-card ad-kpi-blue">
             <div class="ad-kpi-icon"><svg class="ad-svg-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></div>
-            <div class="ad-kpi-label">Read Today</div>
-            <div class="ad-kpi-value">12</div>
+            <div class="ad-kpi-label">Read Notifications</div>
+            <div class="ad-kpi-value" id="adKpiReadNotifs"><?= $readNotifCount ?></div>
           </article>
           <article class="ad-kpi-card ad-kpi-green">
             <div class="ad-kpi-icon"><svg class="ad-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.73 21a2 2 0 0 1-3.46 0"></path><path d="M18.63 13A17.89 17.89 0 0 1 18 8"></path><path d="M6.26 6.26A5.86 5.86 0 0 0 6 8c0 7-3 9-3 9h14"></path><path d="M18 8a6 6 0 0 0-9.33-5"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg></div>
-            <div class="ad-kpi-label">Total This Week</div>
-            <div class="ad-kpi-value">34</div>
+            <div class="ad-kpi-label">Total Notifications</div>
+            <div class="ad-kpi-value" id="adKpiTotalNotifs"><?= $totalNotifCount ?></div>
           </article>
         </div>
 
@@ -1295,19 +1282,19 @@
           <div class="ad-panel-header">
             <h3 class="ad-panel-title"><svg class="ad-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg> Notification Inbox</h3>
             <div class="ad-panel-actions">
-              <button type="button" class="ad-btn ad-btn-ghost ad-btn-sm">Mark All Read</button>
+              <button type="button" class="ad-btn ad-btn-ghost ad-btn-sm" id="adBtnMarkAllRead">Mark All Read</button>
             </div>
           </div>
           <div class="ad-panel-body">
             <div class="ad-notif-list">
-              <?php if (empty($data['notifications'])): ?>
+              <?php if (empty($notifList)): ?>
                 <div class="ad-empty-state" style="padding:2rem;text-align:center;color:var(--ad-text-muted);">
                   <svg class="ad-svg-icon" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;margin-bottom:1rem;"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"></path></svg>
                   <p>No new notifications</p>
                 </div>
               <?php else: ?>
-                <?php foreach ($data['notifications'] as $notif): ?>
-                  <div class="ad-notif-item <?= $notif['is_read'] ? '' : 'unread' ?>">
+                <?php foreach ($notifList as $notif): ?>
+                  <div class="ad-notif-item <?= $notif['is_read'] ? '' : 'unread' ?>" data-notif-id="<?= (int)$notif['id'] ?>">
                     <div class="ad-notif-icon" style="background:var(--ad-info-bg);color:var(--ad-info);">
                       <svg class="ad-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <?php if (strpos($notif['message'], 'SECURITY ALERT') !== false): ?>
