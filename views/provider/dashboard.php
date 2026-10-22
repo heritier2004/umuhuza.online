@@ -156,6 +156,23 @@ $activePlanId = (int)($plan['id'] ?? 1);
         </div>
       </header>
 
+      <?php 
+        $dashError = flash('error'); 
+        $dashSuccess = flash('success'); 
+      ?>
+      <?php if ($dashError): ?>
+        <div class="ad-alert ad-alert-danger" style="margin-bottom:20px;padding:14px 18px;background:rgba(220,38,38,0.1);color:#dc2626;border:1px solid rgba(220,38,38,0.25);border-radius:12px;font-weight:600;display:flex;align-items:center;gap:12px;font-size:0.95rem;">
+          <svg class="ad-svg-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          <span><?= e($dashError) ?></span>
+        </div>
+      <?php endif; ?>
+      <?php if ($dashSuccess): ?>
+        <div class="ad-alert ad-alert-success" style="margin-bottom:20px;padding:14px 18px;background:rgba(22,163,74,0.1);color:#16a34a;border:1px solid rgba(22,163,74,0.25);border-radius:12px;font-weight:600;display:flex;align-items:center;gap:12px;font-size:0.95rem;">
+          <svg class="ad-svg-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><?= e($dashSuccess) ?></span>
+        </div>
+      <?php endif; ?>
+
       <!-- ==============================================
            TAB 1: OVERVIEW (Using 'executive' for JS load)
            ============================================== -->
@@ -480,19 +497,19 @@ function closePlanModal() {
               </div>
               <div class="ad-form-group" style="flex:1; min-width: 250px;">
                 <label>Province</label>
-                <input class="ad-form-control" name="province" placeholder="Kigali" />
+                <input class="ad-form-control" name="province" value="<?= e($user['province'] ?? 'Kigali') ?>" placeholder="Kigali" />
               </div>
               <div class="ad-form-group" style="flex:1; min-width: 250px;">
                 <label>District</label>
-                <input class="ad-form-control" name="district" placeholder="Gasabo" />
+                <input class="ad-form-control" name="district" value="<?= e($user['district'] ?? 'Gasabo') ?>" placeholder="Gasabo" />
               </div>
               <div class="ad-form-group" style="flex:1; min-width: 250px;">
                 <label>Sector</label>
-                <input class="ad-form-control" name="sector" placeholder="Kacyiru" />
+                <input class="ad-form-control" name="sector" value="<?= e($user['sector'] ?? '') ?>" placeholder="e.g. Kacyiru" />
               </div>
               <div class="ad-form-group" style="flex:1; min-width: 250px;">
                 <label>Cell</label>
-                <input class="ad-form-control" name="cell" placeholder="Kamutwa" />
+                <input class="ad-form-control" name="cell" value="<?= e($user['cell'] ?? '') ?>" placeholder="e.g. Kamutwa" />
               </div>
               <div class="ad-form-group" style="width:100%;">
                 <label>Description</label>

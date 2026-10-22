@@ -589,7 +589,9 @@
      INIT — Run on DOM ready
   ---------------------------------------------------------- */
   function init() {
-    switchView('executive');
+    var urlParams = new URLSearchParams(window.location.search);
+    var targetView = urlParams.get('view') || 'executive';
+    switchView(targetView);
     animateCounters();
     animateHealthRing();
     animateProgressBars();

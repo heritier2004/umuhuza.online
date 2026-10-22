@@ -11,17 +11,17 @@ class ListingController {
                 exit;
             }
             
-            $province = sanitize($_POST['province'] ?? '');
-            $district = sanitize($_POST['district'] ?? '');
-            $sector = sanitize($_POST['sector'] ?? '');
-            $cell = sanitize($_POST['cell'] ?? '');
-            if ($province === '' || $district === '' || $sector === '' || $cell === '') {
-                flash('error', 'Location is required for every listing.');
-                header('Location: ?route=provider-dashboard');
+            $user = currentUser();
+            $province = sanitize($_POST['province'] ?? '') ?: ($user['province'] ?? 'Kigali');
+            $district = sanitize($_POST['district'] ?? '') ?: ($user['district'] ?? 'Gasabo');
+            $sector = sanitize($_POST['sector'] ?? '') ?: ($user['sector'] ?? '');
+            $cell = sanitize($_POST['cell'] ?? '') ?: ($user['cell'] ?? '');
+            if ($province === '' || $district === '') {
+                flash('error', 'Province and District are required for your listing.');
+                header('Location: ?route=provider-dashboard&view=create-listing');
                 exit;
             }
             // ---- Listing plan enforcement ----
-            $user = currentUser();
             $plan = Plan::currentForUser($pdo, (int) $user['id']);
             // Determine weekly listing count for the user
             $stmtCount = $pdo->prepare('SELECT COUNT(*) FROM listings WHERE user_id = ? AND YEARWEEK(created_at,1) = YEARWEEK(CURDATE(),1)');
@@ -32,7 +32,7 @@ class ListingController {
             if ($limit !== null && $weeklyCount >= $limit) {
                 $errorMsg = 'You have reached your weekly listing limit. Upgrade your plan for more listings.';
                 flash('error', $errorMsg);
-                header('Location: ?route=provider-dashboard');
+                header('Location: ?route=provider-dashboard&view=create-listing');
                 exit;
             }
             try {
@@ -45,7 +45,7 @@ class ListingController {
                     $uploadResult = handleMultipleUploads($fileInput, 'public/uploads', 1, 5);
                     if (!$uploadResult['success']) {
                         flash('error', $uploadResult['error']);
-                        header('Location: ?route=provider-dashboard');
+                        header('Location: ?route=provider-dashboard&view=create-listing');
                         exit;
                     }
                     $uploadedPaths = $uploadResult['paths'];
@@ -62,7 +62,7 @@ class ListingController {
                     'district' => $district,
                     'sector' => $sector,
                     'cell' => $cell,
-                    'plan_id' => $plan['id'] ?? null,
+                    'plan_id' => !empty($plan['id']) ? (int)$plan['id'] : 1,
                 ]);
                 
                 if ($listingId && !empty($uploadedPaths)) {
@@ -79,16 +79,16 @@ class ListingController {
                 $providerName = $user['full_name'] ?? 'Provider';
                 NotificationModel::notifyAdmins($pdo, "New listing uploaded for approval: '{$listingTitle}' by {$providerName} ({$district})", null, '?route=admin-dashboard');
 
-                flash('success', 'Listing submitted for approval.');
-                header('Location: ?route=provider-dashboard');
+                flash('success', 'Listing submitted successfully! It is pending admin review.');
+                header('Location: ?route=provider-dashboard&view=recent-listings');
                 exit;
             } catch (\Exception $e) {
                 // Rollback on any failure
                 if ($pdo->inTransaction()) {
                     $pdo->rollBack();
                 }
-                flash('error', $e->getMessage());
-                header('Location: ?route=provider-dashboard');
+                flash('error', 'Listing could not be saved: ' . $e->getMessage());
+                header('Location: ?route=provider-dashboard&view=create-listing');
                 exit;
             }
         }

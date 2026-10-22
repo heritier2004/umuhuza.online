@@ -2,18 +2,20 @@
 
 class Listing {
     public static function create($pdo, $data) {
+        $planId = !empty($data['plan_id']) ? (int)$data['plan_id'] : 1;
+        $categoryId = !empty($data['category_id']) ? (int)$data['category_id'] : 1;
         $stmt = $pdo->prepare('INSERT INTO listings (user_id, category_id, title, description, price, province, district, sector, cell, plan_id, status, rating) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "pending", 4.5)');
         $ok = $stmt->execute([
             $data['user_id'],
-            $data['category_id'],
+            $categoryId,
             $data['title'],
-            $data['description'],
-            $data['price'],
-            $data['province'],
-            $data['district'],
-            $data['sector'],
-            $data['cell'],
-            $data['plan_id'],
+            $data['description'] ?? '',
+            (float)($data['price'] ?? 0),
+            !empty($data['province']) ? $data['province'] : 'Kigali',
+            !empty($data['district']) ? $data['district'] : 'Gasabo',
+            !empty($data['sector']) ? $data['sector'] : '',
+            !empty($data['cell']) ? $data['cell'] : '',
+            $planId,
         ]);
         return $ok ? (int) $pdo->lastInsertId() : false;
     }

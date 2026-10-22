@@ -149,6 +149,23 @@ $totalNotifCount = count($notifList);
         </div>
       </div>
 
+      <?php 
+        $adminError = flash('error'); 
+        $adminSuccess = flash('success'); 
+      ?>
+      <?php if ($adminError): ?>
+        <div class="ad-alert ad-alert-danger" style="margin-bottom:20px;padding:14px 18px;background:rgba(220,38,38,0.1);color:#dc2626;border:1px solid rgba(220,38,38,0.25);border-radius:12px;font-weight:600;display:flex;align-items:center;gap:12px;font-size:0.95rem;">
+          <svg class="ad-svg-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          <span><?= e($adminError) ?></span>
+        </div>
+      <?php endif; ?>
+      <?php if ($adminSuccess): ?>
+        <div class="ad-alert ad-alert-success" style="margin-bottom:20px;padding:14px 18px;background:rgba(22,163,74,0.1);color:#16a34a;border:1px solid rgba(22,163,74,0.25);border-radius:12px;font-weight:600;display:flex;align-items:center;gap:12px;font-size:0.95rem;">
+          <svg class="ad-svg-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span><?= e($adminSuccess) ?></span>
+        </div>
+      <?php endif; ?>
+
       <!-- ==================================================
            VIEW 1 — EXECUTIVE OVERVIEW
            ================================================== -->
